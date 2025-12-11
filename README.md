@@ -195,10 +195,104 @@
     <tr>
       <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
       <td>
-   הגרף הוא Stacked Bar Chart: בציר האופקי מופיע נתון אורדינלי על שעות היום (07:00–19:00), בציר האנכי מוצג מספר הביקורים בפועל. כל עמודה מייצגת את כלל הביקורים שנעשו באותה שעה, והעמודה מחולקת לפי צבעים  מוערמים בהתאם לקטגוריית משך הביקור שניתן לראות בו־זמנית גם את סך כל הביקורים בכל שעה וגם את ההרכב הפנימי שלהם. 
+   הגרף הוא Stacked Bar Chart: בציר האופקי מופיע נתון אורדינלי על שעות היום (07:00–19:00), בציר האנכי מוצג מספר הביקורים בפועל. כל עמודה מייצגת את כלל הביקורים שנעשו באותה שעה, והעמודה מחולקת לפי צבעים  מוערמים בהתאם לקטגוריית משך הביקור שניתן לראות בו־זמנית גם את סך כל הביקורים בכל שעה וגם את ההרכב הפנימי שלהם.
+
+   
       
       </td>
     </tr>
   </tbody>
 </table>
+##קוד pyton 
+<details>
+<summary><strong>לחץ להצגת הקוד המלא (Python)</strong></summary>
+
+<br>
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+import io
+
+# ==========================================
+# STEP 2: Data Preprocessing
+# ==========================================
+
+# Filter: Keep only rows where an actual visit took place
+df_visits = df[df['האם ביקר בפועל'] == 1].copy()
+
+# Time Conversion: Convert string time columns to datetime objects
+df_visits['start_dt'] = pd.to_datetime(df_visits['זמן התחלה'], format='%H:%M:%S', errors='coerce')
+df_visits['end_dt'] = pd.to_datetime(df_visits['זמן סיום'], format='%H:%M:%S', errors='coerce')
+
+# Calculate Duration: Compute visit length in minutes
+df_visits['duration_mins'] = (df_visits['end_dt'] - df_visits['start_dt']).dt.total_seconds() / 60
+
+# Data Cleaning:
+# Remove errors (<=0) and outliers (>300 mins)
+df_visits = df_visits[(df_visits['duration_mins'] > 0) & (df_visits['duration_mins'] < 300)]
+
+# Extract Hour
+df_visits['Hour'] = df_visits['start_dt'].dt.hour
+
+# Filter Hours: Focus ONLY on 07:00 to 19:00
+df_visits = df_visits[(df_visits['Hour'] >= 7) & (df_visits['Hour'] <= 19)]
+
+# ==========================================
+# STEP 3: Categorization Logic (The Story)
+# ==========================================
+def classify_duration(mins):
+    if mins <= 10:
+        return '1. Touch & Go (<10m)'      # Short visits
+    elif mins <= 45:
+        return '2. Standard Work (10-45m)' # Effective time
+    else:
+        return '3. Deep/Stuck (>45m)'      # Long visits
+
+df_visits['Duration_Category'] = df_visits['duration_mins'].apply(classify_duration)
+
+# ==========================================
+# STEP 4: Visualization
+# ==========================================
+
+# Prepare Data: Group by Hour and Category
+pivot_duration = df_visits.groupby(['Hour', 'Duration_Category']).size().unstack(fill_value=0)
+
+# Define Pastel Colors
+pastel_colors = ['#aec7e8', '#98df8a', '#ff9896']
+
+# Create Plot
+plt.figure(figsize=(14, 7))
+pivot_duration.plot(kind='bar', stacked=True, ax=plt.gca(), color=pastel_colors, width=0.85)
+hours = pivot_duration.index  # שעות 7–19
+
+plt.xticks(
+    ticks=range(len(hours)),
+    labels=[f"{h}:00" for h in hours],
+    rotation=0
+)
+
+# Styling
+plt.title('Visit Duration Analysis: 07:00 - 19:00', fontsize=16, fontweight='bold', color='#333333')
+plt.xlabel('Hour of Day', fontsize=20)
+plt.ylabel('Number of Visits', fontsize=20)
+
+leg = plt.legend(title="Visit Duration Type")
+for text in leg.get_texts():
+    text.set_fontsize(16)
+leg.get_title().set_fontsize(16)
+
+for patch in leg.get_patches():
+    patch.set_width(20)
+    patch.set_height(12)
+
+plt.grid(axis='y', alpha=0.3, linestyle='--', color='gray')
+plt.xticks(rotation=0)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.tight_layout()
+
+print("Generating chart...")
+plt.show()
+
 
