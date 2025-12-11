@@ -293,8 +293,8 @@ plt.yticks(fontsize=16)
 plt.tight_layout()
 
 print("Generating chart...")
-plt.show() ```
-
+plt.show()
+```
 </details>
 
 <br>
