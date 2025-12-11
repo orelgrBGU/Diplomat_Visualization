@@ -203,7 +203,7 @@
     </tr>
   </tbody>
 </table>
-##קוד pyton 
+
 <details>
 <summary><strong>לחץ להצגת הקוד המלא (Python)</strong></summary>
 
