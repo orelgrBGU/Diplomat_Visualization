@@ -295,18 +295,6 @@ plt.tight_layout()
 print("Generating chart...")
 plt.show()
 
-
-<br>
-
-### 📊 Visualization Output (Screenshot)
-
-<div align="center">
-  <img src="[https://raw.githubusercontent.com/USERNAME/REPO/main/PATH/TO/YOUR_IMAGE.png](https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/duration_plot1.png?raw=true)" 
-       alt="Visit Duration Visualization"
-       width="80%" 
-       style="border: 1px solid #ccc; border-radius: 8px;">
-</div>
-
-<br>
-
+📊 Visualization Output (Screenshot)
+<div align="center"> <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/duration_plot1.png?raw=true" alt="Visit Duration Visualization" width="80%" style="border: 1px solid #ccc; border-radius: 8px;"> </div> <br> ```
 
