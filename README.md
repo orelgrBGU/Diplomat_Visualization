@@ -293,8 +293,19 @@ plt.yticks(fontsize=16)
 plt.tight_layout()
 
 print("Generating chart...")
-plt.show()
+plt.show() ```
 
-📊 Visualization Output (Screenshot)
-<div align="center"> <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/duration_plot1.png?raw=true" alt="Visit Duration Visualization" width="80%" style="border: 1px solid #ccc; border-radius: 8px;"> </div> <br> ```
+</details>
 
+<br>
+
+### 📊 Visualization Output (Screenshot)
+
+<div align="center">
+  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/duration_plot1.png?raw=true"
+       alt="Visit Duration Visualization"
+       width="80%"
+       style="border: 1px solid #ccc; border-radius: 8px;">
+</div>
+
+<br>
