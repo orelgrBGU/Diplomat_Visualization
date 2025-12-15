@@ -484,3 +484,171 @@ plt.show()
 ## הסבר על הגרף 
 
 הוויזואליזציה חושפת פער אסטרטגי מובהק באופי העבודה של סוכני המכירות. בעוד שהסוכנים המובילים (בראש הגרף, כגון Agent 35 ו-Agent 25) מציגים התפלגות "שטוחה" ורחבה המעידה על תמהיל עסקאות מגוון ונטייה לעסקאות ענק (חציון סביב 40,000₪), הסוכנים בחלק התחתון מתאפיינים בגרף "שפיצי" וצר המעיד על עבודה סיזיפית של מאות עסקאות קטנות וזהות (חציון סביב 9,000₪).
+
+
+
+## ויזואליזציה 3 
+## מודל WWH – הסבר על הוויזואליזציה
+
+<table dir="rtl">
+  <thead>
+    <tr>
+      <th>רכיב</th>
+      <th>תוכן</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>What – מה מוצג?</strong></td>
+      <td>
+ הגרף מציג מפת חום (Heatmap) של אחוז ההמרה (Conversion Rate) בחלוקה לימי השבוע ולשעות הפעילות (07:00–19:00). כל תא במטריצה מייצג את הסבירות שלקוח שנכנס בשעה וביום מסוימים יבצע רכישה משמעותית (מעל 50 ₪). עוצמת הצבע (מבהיר לכהה) מעידה על גובה אחוז ההמרה, ובנוסף מופיע בתוך כל תא הערך המספרי המדויק באחוזים.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
+      <td>
+המטרה היא זיהוי דפוסים ומגמות לצורך אופטימיזציה של סידור העבודה. במקום לנחש מתי לשבץ סוכנים, הגרף מראה בבירור מתי העסק נמצא ב"דופק גבוה" (יעילות שיא) ומתי הוא ב"זמן מת". תצוגה זו נבחרה כי היא מונעת את העומס הוויזואלי שהיה נוצר בהצגת גרף קווי עם חמישה קווים חופפים ("ספגטי"), ומאפשרת סריקה הוליסטית ומהירה של כל השבוע במבט אחד.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
+      <td>
+  הוויזואליזציה משתמשת במיקום מרחבי על גבי גריד (מטריצה): ציר ה-X מייצג את שעות היממה וציר ה-Y את ימי השבוע. המשתנה הכמותי (אחוז ההמרה) מיוצג על ידי ערוץ הצבע (Color Saturation) בסקאלה רציפה של כחולים (תכלת עד כחול עמוק). הנתונים עברו אגרגציה (חישוב ממוצע) לכל שעה ויום, והתווספו תוויות טקסט מספריות לדיוק מקסימלי בקבלת ההחלטות.
+
+   
+  
+  </tbody>
+</table>
+
+<details>
+<summary><strong>לחץ להצגת הקוד המלא (Python)</strong></summary>
+
+<br>
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+from matplotlib.colors import LinearSegmentedColormap
+
+# --- 1. Data Loading & Preparation ---
+# Ensure 'df' is loaded. If running standalone, uncomment:
+# df = pd.read_csv('דאטא לויזואליזציה.xlsx - גיליון1.csv')
+
+df.rename(columns={
+    'סכום נטו הזמנה ': 'NetAmount',
+    'זמן התחלה': 'StartTime',
+    'Date': 'Date'
+}, inplace=True)
+
+df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+df = df.dropna(subset=['Date'])
+df['StartTime'] = pd.to_datetime(df['StartTime'], format='%H:%M:%S', errors='coerce')
+df['Hour'] = df['StartTime'].dt.hour
+df['DayOfWeek'] = df['Date'].dt.day_name()
+
+# Define Conversion: Orders > 50 NIS
+df['IsConversion'] = df['NetAmount'] > 50
+
+# Filter Business Hours (07:00 - 19:00)
+df_business = df[(df['Hour'] >= 7) & (df['Hour'] <= 19)].copy()
+
+# Create Pivot Table
+heatmap_data = df_business.pivot_table(
+    index='DayOfWeek',
+    columns='Hour',
+    values='IsConversion',
+    aggfunc='mean'
+) * 100
+
+# Sort Days
+days_order = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']
+existing_days = [d for d in days_order if d in heatmap_data.index]
+heatmap_data = heatmap_data.reindex(existing_days)
+
+# --- 2. Smart Scaling & NEW Custom Palette ---
+# Calculate 5th and 95th percentiles
+vmin_smart = np.nanpercentile(heatmap_data.values, 5)
+vmax_smart = np.nanpercentile(heatmap_data.values, 95)
+
+# NEW PALETTE: Visible Light Blue -> Deep Navy
+# #d1e3f0: Light Blue-Grey (Visible on white paper)
+# #08306b: Deep Navy (Strong contrast)
+colors = ["#d1e3f0", "#08306b"]
+custom_cmap = LinearSegmentedColormap.from_list("custom_navy", colors, N=100)
+
+# --- 3. Plotting ---
+plt.figure(figsize=(12, 6))
+sns.set_theme(style="white")
+
+ax = sns.heatmap(
+    heatmap_data,
+    annot=True,
+    fmt=".0f",
+    cmap=custom_cmap,
+    vmin=vmin_smart,
+    vmax=vmax_smart,
+    linewidths=2,
+    linecolor='white',
+    cbar_kws={'label': 'Conversion Rate (%)', 'shrink': 0.8}
+)
+
+# --- 4. Dynamic Text Color Logic ---
+threshold = (vmax_smart + vmin_smart) / 2
+
+for t in ax.texts:
+    try:
+        val = float(t.get_text())
+        if val > threshold:
+            t.set_color('white')
+            t.set_weight('bold')
+        else:
+            t.set_color('#1a1a1a') # Almost black for better contrast on light blue
+    except ValueError:
+        pass
+
+# --- 5. Styling Ticks & Labels ---
+ax.tick_params(axis='both', colors='#95a5a6', length=0)
+plt.xticks(rotation=0, fontsize=10, fontweight='bold', color='#7f8c8d')
+plt.yticks(rotation=0, fontsize=10, fontweight='bold', color='#7f8c8d')
+
+# Axis Titles
+ax.set_xlabel("Hour of Day", fontsize=11, fontweight='bold', labelpad=15, color='#7f8c8d')
+ax.set_ylabel("", fontsize=11)
+
+# Format X-axis
+ax.set_xticklabels([f"{int(h):02d}:00" for h in heatmap_data.columns])
+
+# --- 6. Titles & Footer ---
+plt.text(x=0, y=-0.8, s="Conversion rate by day of week and hour of day",
+         fontsize=18, fontweight='bold', color='#2c3e50', ha='left')
+
+plt.text(x=0, y=-0.3, s="Retail visits converted to sales above 50 NIS, in percent",
+         fontsize=12, color='#555555', ha='left')
+
+plt.figtext(0.5, -0.05,
+            "Data reflects average conversion probability based on Q2-Q3 performance. Measured as (Orders > 50 NIS) / (Total Visits).",
+            ha="center", fontsize=9, color='#95a5a6')
+
+plt.tight_layout()
+plt.show()
+```
+</details>
+
+<br>
+
+### 📊 Visualization Output (Screenshot)
+
+<div align="center">
+  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/duration_plot1.png?raw=true"
+       alt="Visit Duration Visualization"
+       width="80%"
+       style="border: 1px solid #ccc; border-radius: 8px;">
+</div>
+
+<br>
+
+## הסבר על הגרף 
+
+הויזואליזציה  היא מאפשרת לנו לראות ששעות השיא (10:00-13:00) אינן מתאפיינות רק בכמות ביקורים גבוהה אלא גם על מעידים על פגישות ארוכות מדיי של סוכנים בסניפים. לעומת זאת, ככל שמתקרבים לסוף היום (החל מ-16:00), הגרף ממחיש דעיכה העמודות לא רק מתנמכות, אלא משנות את צבען לכחול דומיננטי  מה שמעיד על לחץ אולי לסיים את העבודה מהר ולהגיע הביתה או שאולי אנשי הממשק הנדרשים נמצאים יותר בשעות הצהריים ושם יש ריכוז מאמץ על ההזמנות אולי שווה לשקול שסוכנים יפוזורו יותר בשעות הצהריים מאשר בשעות הערב
