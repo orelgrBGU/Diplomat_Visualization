@@ -824,25 +824,16 @@ fig.show()
 
 <br>
 
-### 📊 Visualization Output: Strategic Efficiency Matrix
+
+### 📊 Visualization Output (Screenshot)
 
 <div align="center">
-  <a href="https://orelgrBGU.github.io/Diplomat_Visualization/strategic_matrix_squares.html" target="_blank">
-    
-    <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/Strategic_Matrix_Squares.png?raw=true"
-         alt="Strategic Matrix Visualization"
-         width="85%"
-         style="border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-  </a>
-  
-  <br><br>
-  
-  <a href="https://orelgrBGU.github.io/Diplomat_Visualization/strategic_matrix_squares.html" target="_blank">
-    <img src="https://img.shields.io/badge/INTERACTIVE-Click_Here_To_Explore-blue?style=for-the-badge&logo=plotly" alt="Open Interactive Graph">
-  </a>
-  
-  <p>👆 <b>לחץ על התמונה או על הכפתור כדי לפתוח את הגרף האינטראקטיבי</b></p>
+  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/viz%203.png?raw=true"
+       alt="Conversion Rate Heatmap"
+       width="85%"
+       style="border: 1px solid #ccc; border-radius: 8px;">
 </div>
+
 
 <br>
 
