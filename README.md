@@ -657,198 +657,7 @@ plt.show()
 תובנה זו מאפשרת למנהלים לבצע אופטימיזציה של סידור העבודה: במקום לשבץ כוח אדם באופן אחיד, ניתן לתגבר את המשמרות בשעות ה"שיא" שבהן הלקוחות בשלים לקנייה, ולנצל את "החורים הלבנים" (שעות השפל) למשימות אדמיניסטרטיביות, הדרכות או מנוחה, ובכך למקסם את התפוקה מכל שעת עבודה.
 
 
-
 # ויזואליזציה 4
-## מודל WWH – הסבר על הוויזואליזציה
-
-<table dir="rtl">
-  <thead>
-    <tr>
-      <th>רכיב</th>
-      <th>תוכן</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>What – מה מוצג?</strong></td>
-      <td>
- הגרף מציג מטריצת פיזור (Scatter Matrix) של 10 הערים המובילות בחברה, הממופות על בסיס שני צירים: משך הביקור הממוצע בדקות (ציר X) וסך ההכנסות המצטבר (ציר Y). כל עיר מיוצגת על ידי סמן בצורת ריבוע, כאשר שטח הריבוע משקף את נפח הפעילות (מספר הביקורים באותה עיר). הרקע מחולק לארבעה אזורי יעילות ("רביעים") בצבעים פסטליים, המסווגים את הערים ל: מצטיינים, טעוני שיפור, ביצועים נמוכים ופוטנציאל לא ממומש.
-      </td>
-    </tr>
-    <tr>
-      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
-      <td>
-המטרה העסקית היא לנתח את היעילות התפעולית (ROI על זמן עבודה). מבחינה ויזואלית, הבחירה בריבועים (Squares) במקום בעיגולים קלאסיים נעשתה מתוך שיקול תפיסתי-קוגניטיבי: המחקר מראה שלעין האנושית קל יותר להשוות ולמדוד הבדלי גודל (שטח) בין צורות בעלות קווים ישרים ופינות מאשר בין עיגולים. עיצוב זה מאפשר למנהל לזהות במדויק ערים שבהן מושקעת "מסה" גדולה של ביקורים (ריבועים גדולים) ללא תמורה כספית הולמת.
-      </td>
-    </tr>
-    <tr>
-      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
-      <td>
-  הנתונים עברו תהליך ETL שכלל המרה (Parsing) של טווחי שעות טקסטואליים לערכים מספריים (Duration), וסינון חריגים (Outliers). לאחר אגרגציה לפי עיר, הנתונים הוצגו באמצעות ספריית Plotly. הגרף כולל שכבת אינטראקטיביות מתקדמת , נעשה שימוש בצבעים פסטליים רכים להפרדת הרביעים, והוספו שכבות מידע אינטראקטיביות (Tooltips) החושפות מדדי עומק נוספים – כמו "גודל הזמנה ממוצע" ו"יעילות שקלית לדקה" – רק כאשר המשתמש מתמקד בריבוע ספציפי.
-
-   
-  
-  </tbody>
-</table>
-
-<details>
-<summary><strong>לחץ להצגת הקוד המלא (Python)</strong></summary>
-
-<br>
-
-```python
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-import numpy as np
-
-print("--- מתחיל יצירת גרף ריבועים ---")
-
-# ==========================================
-# 1. טעינת ועיבוד נתונים (כמו בקוד שעבד לנו)
-# ==========================================
-if 'df' in locals():
-    raw_df = df.copy()
-else:
-    raise ValueError("❌ לא נמצא משתנה df. טען את הקובץ מחדש.")
-
-# חישוב משך זמן ביקור (מתוך הטקסט "06:29-08:43")
-raw_df['Revenue'] = pd.to_numeric(raw_df['Revenue'], errors='coerce').fillna(0)
-
-try:
-    time_split = raw_df['זמן ביקור'].astype(str).str.split('-', expand=True)
-    start_times = pd.to_datetime(time_split[0], format='%H:%M', errors='coerce')
-    end_times = pd.to_datetime(time_split[1], format='%H:%M', errors='coerce')
-    raw_df['Duration_Mins'] = (end_times - start_times).dt.total_seconds() / 60
-    print("✅ זמנים חושבו בהצלחה.")
-except:
-    # גיבוי למקרה שהפורמט שונה
-    raw_df['Duration_Mins'] = (pd.to_datetime(raw_df['זמן סיום'], errors='coerce') - 
-                               pd.to_datetime(raw_df['זמן התחלה'], errors='coerce')).dt.total_seconds() / 60
-
-# סינון
-mask = (raw_df['Revenue'] > 0) & (raw_df['Duration_Mins'] > 0) & (raw_df['Duration_Mins'] < 180)
-df_plot = raw_df[mask].copy()
-
-# אגרגציה
-df_city_level = df_plot.groupby('City').agg({
-    'Revenue': 'sum', 
-    'Duration_Mins': 'mean', 
-    'Date': 'count'
-}).reset_index()
-
-# שמות ומדדים
-df_city_level.columns = ['City', 'Revenue', 'Duration_Mins', 'Date'] # יישור שמות
-df_city_level['Avg_Order'] = df_city_level['Revenue'] / df_city_level['Date']
-df_city_level['RPM'] = df_city_level['Revenue'] / (df_city_level['Duration_Mins'] * df_city_level['Date'])
-
-# שמות לעברית
-df_city_level = df_city_level.rename(columns={
-    'City': 'עיר', 'Revenue': 'סה"כ הכנסות', 'Duration_Mins': 'זמן ביקור ממוצע',
-    'Date': 'נפח פעילות (מספר ביקורים)', 'Avg_Order': 'גודל הזמנה ממוצע', 'RPM': 'יעילות תפעולית (₪ לדקה)'
-})
-
-# 10 הערים המובילות
-df_top10 = df_city_level.sort_values('סה"כ הכנסות', ascending=False).head(10)
-
-# ==========================================
-# 2. בניית הגרף (עם ריבועים!)
-# ==========================================
-
-avg_time = df_top10['זמן ביקור ממוצע'].mean()
-avg_rev = df_top10['סה"כ הכנסות'].mean()
-
-fig = px.scatter(
-    df_top10,
-    x="זמן ביקור ממוצע",
-    y='סה"כ הכנסות',
-    size="נפח פעילות (מספר ביקורים)", # גודל הריבוע
-    color="עיר",
-    text="עיר",
-    hover_data={"עיר": False, "סה\"כ הכנסות": ':,.0f', "זמן ביקור ממוצע": ':.1f', "נפח פעילות (מספר ביקורים)": True},
-    title="מטריצת ביצועים אסטרטגית: ניתוח יעילות ערים",
-    template="plotly_white",
-    height=750
-)
-
-# --- השינוי המרכזי: הפיכת העיגולים לריבועים ---
-fig.update_traces(
-    marker_symbol='square',  # <=== זה מה שהופך לריבועים
-    textposition='top center', 
-    textfont_weight="bold", 
-    marker=dict(line=dict(width=1.5, color='white'), opacity=0.9)
-)
-
-# ==========================================
-# 3. עיצוב רקעים ותוויות
-# ==========================================
-x_min, x_max = df_top10['זמן ביקור ממוצע'].min() * 0.9, df_top10['זמן ביקור ממוצע'].max() * 1.1
-y_min, y_max = df_top10['סה"כ הכנסות'].min() * 0.9, df_top10['סה"כ הכנסות'].max() * 1.1
-
-# רקעים פסטליים
-fig.add_shape(type="rect", x0=x_min, y0=avg_rev, x1=avg_time, y1=y_max, fillcolor="#D4EFDF", opacity=0.5, layer="below", line_width=0)
-fig.add_shape(type="rect", x0=avg_time, y0=y_min, x1=x_max, y1=avg_rev, fillcolor="#FADBD8", opacity=0.5, layer="below", line_width=0)
-fig.add_shape(type="rect", x0=avg_time, y0=avg_rev, x1=x_max, y1=y_max, fillcolor="#FAE5D3", opacity=0.5, layer="below", line_width=0)
-fig.add_shape(type="rect", x0=x_min, y0=y_min, x1=avg_time, y1=avg_rev, fillcolor="#D6EAF8", opacity=0.5, layer="below", line_width=0)
-
-# קווים לבנים
-fig.add_vline(x=avg_time, line_dash="solid", line_color="white", line_width=3)
-fig.add_hline(y=avg_rev, line_dash="solid", line_color="white", line_width=3)
-
-# תוויות בפינות
-def add_label(x, y, text, color, align, x_shift, y_shift):
-    fig.add_annotation(x=x, y=y, text=f"<b>{text}</b>", showarrow=False, font=dict(size=14, color=color, family="Arial Black"), bgcolor="rgba(255,255,255,0.6)", xanchor=align, xshift=x_shift, yshift=y_shift)
-
-add_label(x_min, y_max, "💎 מצטיינים", "#196F3D", "left", 10, -10)
-add_label(x_max, y_min, "⚠️ ביצועים נמוכים", "#943126", "right", -10, 10)
-add_label(x_max, y_max, "🔨 דורש התייעלות", "#AF601A", "right", -10, -10)
-add_label(x_min, y_min, "🚀 פוטנציאל", "#2874A6", "left", 10, 10)
-
-fig.update_layout(
-    showlegend=False, 
-    margin=dict(t=90, b=60, l=60, r=60), 
-    xaxis=dict(title="<b>משך ביקור ממוצע (דקות)</b> ", range=[x_min, x_max]),
-    yaxis=dict(title="<b>סה\"כ הכנסות (₪)</b>", range=[y_min, y_max])
-)
-
-# שמירה
-try:
-    fig.write_image("Strategic_Matrix_Squares.png", scale=3, width=1200, height=800)
-    print("✅ תמונה נשמרה: Strategic_Matrix_Squares.png")
-except:
-    print("⚠️ לא ניתן לשמור תמונה אוטומטית.")
-
-fig.show()
-```
-</details>
-
-<br>
-
-### 📊 Visualization Output (Screenshot)
-
-<div align="center">
-  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/Strategic_Matrix_Squares.png?raw=true"
-       alt="Strategic Efficiency Matrix"
-       width="85%"
-       style="border: 1px solid #ccc; border-radius: 8px;">
-</div>
-<a href="https://htmlpreview.github.io/?https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/strategic_matrix_squares.html" target="_blank">
-    <img src="https://img.shields.io/badge/VIEW_INTERACTIVE_GRAPH-Click_Here-brightgreen?style=for-the-badge&logo=html5&logoColor=white" alt="View Interactive Graph">
-  </a>
-  
-  <p style="font-size: 14px; color: #555;">
-    👆 <b>לחץ על הכפתור הירוק כדי לשחק עם הנתונים בזמן אמת</b>
-  </p>
-</div>
-
-<br>
-
-## הסבר על הגרף
-
-הויזואליזציה מאפשרת לנו לראות שהערים המובילות (ברביע הירוק) אינן מתאפיינות רק בהכנסות גבוהות, אלא גם בביקורים קצרים וממוקדים – מה שמעיד על תהליך מכירה "חד" ויעיל. לעומת זאת, ככל שזזים ימינה במטריצה (לכיוון האדום/כתום), הגרף ממחיש "בזבוז משאבים": הריבועים נשארים גדולים (נפח פעילות גבוה), אך נמתחים על פני זמן רב מדי ללא עלייה תואמת בהכנסה. מה שמעיד כנראה על עיכובים לוגיסטיים או "זמן מת" שבו הסוכן ממתין בסניף ללא מעש.
-
-
-# ויזואליזציה 5
 ## מודל WWH – הסבר על הוויזואליזציה
 
 <table dir="rtl">
@@ -1115,3 +924,412 @@ except:
 
 הויזואליזציה מציגה את מדד "משמעת הביצוע" של המנהלים, כשהיא מחלקת את הפעילות לשני עולמות: צד ימין (הירוק) משקף עבודה תקינה שבוצעה בדיוק לפי התכנון, בעוד צד שמאל (האדום/כתום) חושף חריגות ועבודה לא מתוכננת.
 ניתן לראות בבירור דפוס מעניין: רוב החריגות והעבודה הלא-מתוכננת (בצד השמאלי) מתבצעות בטלפון (הגוונים הבהירים), בעוד שביקורים פיזיים נוטים להיות מתוכננים ומוקפדים יותר. הגרף מאפשר להנהלה לזהות במבט אחד מי מהמנהלים עובד בצורה מסודרת ושיטתית, ומי פועל בצורה ריאקטיבית של "כיבוי שריפות" ועיגול פינות מרחוק.
+
+
+
+# ויזואליזציה 5
+## מודל WWH – הסבר על הוויזואליזציה
+
+<table dir="rtl">
+  <thead>
+    <tr>
+      <th>רכיב</th>
+      <th>תוכן</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>What – מה מוצג?</strong></td>
+      <td>
+ הוויזואליזציה מציגה מפת חום גאוגרפית (Density Map) הממפה את היקף המכירות המצטבר בכל עיר בישראל. הנתונים מבוססים על קואורדינטות (Latitude/Longitude) של כל עיר, כאשר "עוצמת החום" (הצבע והבהירות) מייצגת את סך המכירות במיליוני שקלים. המפה משתמשת בסקאלת צבעים רציפה הנעה מצהוב (פעילות נמוכה) לאדום כהה (מוקדי כוח).
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
+      <td>
+המטרה העסקית היא לזהות דפוסים מרחביים שקשה לראות בטבלאות אקסל רגילות. טבלה ממיינת ערים לפי שם או סכום, אך מנתקת אותן מההקשר הגיאוגרפי שלהן. מפת החום נבחרה כי היא מאפשרת למנהלים לזהות במבט אחד "כתמי נפט" של הצלחה (אזורים שבהם אנו שולטים בשוק) לעומת אזורים שבהם הפעילות דלילה מדי, ובכך לייעל את מערך ההפצה והלוגיסטיקה.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
+      <td>
+  התהליך כלל שלב Geocoding (המרה של שמות ערים לקואורדינטות GPS) באמצעות ספריית geopy. הנתונים הוצגו על גבי תשתית המפות של Mapbox בסגנון "Dark Matter" (רקע כהה), בחירה עיצובית שמבליטה את נקודות הצבע הזוהרות ומקלה על זיהוי מוקדים. האינטראקטיביות מאפשרת למשתמש לבצע Zoom-in לרמת הרחוב, ולרחף עם העכבר כדי לראות נתוני עומק מדוייקים לכל עיר (כמות הזמנות, סך קרטונים, ומכירות נטו).
+
+   
+  
+  </tbody>
+</table>
+
+<details>
+<summary><strong>לחץ להצגת הקוד המלא (Python)</strong></summary>
+
+<br>
+
+```python
+import pandas as pd
+import plotly.express as px
+import io
+import os
+from geopy.geocoders import Nominatim
+from geopy.extra.rate_limiter import RateLimiter
+from google.colab import files
+
+# =========================
+# 1. Load File
+# =========================
+
+uploaded = files.upload()
+filename = next(iter(uploaded))
+file_bytes = uploaded[filename]
+
+try:
+    df = pd.read_csv(io.BytesIO(file_bytes))
+except:
+    df = pd.read_excel(io.BytesIO(file_bytes))
+
+print("File loaded successfully")
+
+# =========================
+# 2. Data Preparation
+# =========================
+
+df = df.rename(columns={
+    'עיר': 'city',
+    'סכום נטו הזמנה ': 'NetAmount',
+    'סהכ קרטונים בהזמנה': 'TotalCartons'
+})
+
+df = df[
+    df['city'].notna() &
+    (df['NetAmount'] > 0)
+].copy()
+
+city_agg = (
+    df
+    .groupby('city', as_index=False)
+    .agg(
+        TOTAL_ORDERS=('NetAmount', 'count'),
+        TOTAL_SALES=('NetAmount', 'sum'),
+        TOTAL_CARTONS=('TotalCartons', 'sum')
+    )
+)
+
+city_agg['SALES_M'] = city_agg['TOTAL_SALES'] / 1_000_000
+
+# =========================
+# 3. Geocoding with Cache
+# =========================
+
+coords_cache_path = "city_coords_cache_sales.csv"
+
+if os.path.exists(coords_cache_path):
+    coords_cache = pd.read_csv(coords_cache_path)
+else:
+    coords_cache = pd.DataFrame(columns=["city", "lat", "lon"])
+
+city_agg = city_agg.merge(coords_cache, on="city", how="left")
+
+geolocator = Nominatim(user_agent="sales_heatmap_israel")
+geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
+
+for idx, row in city_agg[city_agg["lat"].isna()].iterrows():
+    location = geocode(f"{row['city']}, Israel")
+    if location:
+        city_agg.at[idx, "lat"] = location.latitude
+        city_agg.at[idx, "lon"] = location.longitude
+        print(f"Geocoded {row['city']}")
+    else:
+        print(f"Skipped {row['city']}")
+
+city_agg[["city", "lat", "lon"]].dropna().to_csv(
+    coords_cache_path, index=False
+)
+
+city_agg = city_agg.dropna(subset=["lat", "lon"])
+
+# =========================
+# 4. Map Visualization (English labels)
+# =========================
+
+fig = px.density_mapbox(
+    city_agg,
+    lat="lat",
+    lon="lon",
+    z="SALES_M",
+    radius=35,
+    center=dict(lat=31.5, lon=34.8),
+    zoom=6,
+    mapbox_style="carto-darkmatter",
+    color_continuous_scale="YlOrRd",
+    hover_name="city",
+    hover_data={
+        "TOTAL_ORDERS": True,
+        "TOTAL_SALES": True,
+        "TOTAL_CARTONS": True,
+        "SALES_M": True
+    },
+    title="Sales Heatmap by City"
+)
+
+# Custom hover (clean English, no lat/lon)
+fig.update_traces(
+    hovertemplate=
+    "<b>%{hovertext}</b><br><br>"
+    "Sales (Million ₪): %{z:.2f}<br>"
+    "Total Orders: %{customdata[0]}<br>"
+    "Total Net Sales (₪): %{customdata[1]:,.0f}<br>"
+    "Total Cartons: %{customdata[2]}<extra></extra>"
+)
+
+fig.update_layout(
+    title=dict(
+        text="Sales Heatmap by City",
+        x=0.5,
+        xanchor="center"
+    )
+)
+
+fig.show(
+    config={
+        "scrollZoom": True,
+        "displayModeBar": True
+    }
+)
+
+# =========================
+# 5. Export to HTML
+# =========================
+
+html_file = "sales_heatmap_by_city.html"
+
+fig.write_html(
+    html_file,
+    config={
+        "scrollZoom": True,
+        "displayModeBar": True
+    }
+)
+
+files.download(html_file)
+
+```
+</details>
+
+<br>
+
+### 📊 Visualization Output (Screenshot)
+
+<div align="center">
+  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/Strategic_Matrix_Squares.png?raw=true"
+       alt="Strategic Efficiency Matrix"
+       width="85%"
+       style="border: 1px solid #ccc; border-radius: 8px;">
+</div>
+<a href="https://htmlpreview.github.io/?https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/strategic_matrix_squares.html" target="_blank">
+    <img src="https://img.shields.io/badge/VIEW_INTERACTIVE_GRAPH-Click_Here-brightgreen?style=for-the-badge&logo=html5&logoColor=white" alt="View Interactive Graph">
+  </a>
+  
+  <p style="font-size: 14px; color: #555;">
+    👆 <b>לחץ על הכפתור הירוק כדי לשחק עם הנתונים בזמן אמת</b>
+  </p>
+</div>
+
+<br>
+
+## הסבר על הגרף
+
+התרשים מציג את התפלגות המכירות הארצית, כאשר עוצמת הצבע מעידה על נפח הפעילות הכספי. ניתן לראות בבירור שהליבה העסקית מרוכזת במרכז הארץ, היוצרת "כתם חום" גדול ורציף. לעומת זאת, באזורי הצפון והדרום הפעילות מבוזרת יותר ומתרכזת בערים בודדות בלבד. תצוגה זו מאפשרת למקבלי ההחלטות לזהות פערים לוגיסטיים ולבחון האם ישנם אזורים גיאוגרפיים שלמים ש"נזנחו" או שאינם מקבלים כיסוי מספק מצוותי המכירות.
+
+
+
+
+# ויזואליזציה 6
+## מודל WWH – הסבר על הוויזואליזציה
+
+<table dir="rtl">
+  <thead>
+    <tr>
+      <th>רכיב</th>
+      <th>תוכן</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>What – מה מוצג?</strong></td>
+      <td>
+ הגרף מציג מטריצת פיזור (Scatter Matrix) של 10 הערים המובילות בחברה, הממופות על בסיס שני צירים: משך הביקור הממוצע בדקות (ציר X) וסך ההכנסות המצטבר (ציר Y). כל עיר מיוצגת על ידי סמן בצורת ריבוע, כאשר שטח הריבוע משקף את נפח הפעילות (מספר הביקורים באותה עיר). הרקע מחולק לארבעה אזורי יעילות ("רביעים") בצבעים פסטליים, המסווגים את הערים ל: מצטיינים, טעוני שיפור, ביצועים נמוכים ופוטנציאל לא ממומש.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
+      <td>
+המטרה העסקית היא לנתח את היעילות התפעולית (ROI על זמן עבודה). מבחינה ויזואלית, הבחירה בריבועים (Squares) במקום בעיגולים קלאסיים נעשתה מתוך שיקול תפיסתי-קוגניטיבי: המחקר מראה שלעין האנושית קל יותר להשוות ולמדוד הבדלי גודל (שטח) בין צורות בעלות קווים ישרים ופינות מאשר בין עיגולים. עיצוב זה מאפשר למנהל לזהות במדויק ערים שבהן מושקעת "מסה" גדולה של ביקורים (ריבועים גדולים) ללא תמורה כספית הולמת.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
+      <td>
+  הנתונים עברו תהליך ETL שכלל המרה (Parsing) של טווחי שעות טקסטואליים לערכים מספריים (Duration), וסינון חריגים (Outliers). לאחר אגרגציה לפי עיר, הנתונים הוצגו באמצעות ספריית Plotly. הגרף כולל שכבת אינטראקטיביות מתקדמת , נעשה שימוש בצבעים פסטליים רכים להפרדת הרביעים, והוספו שכבות מידע אינטראקטיביות (Tooltips) החושפות מדדי עומק נוספים – כמו "גודל הזמנה ממוצע" ו"יעילות שקלית לדקה" – רק כאשר המשתמש מתמקד בריבוע ספציפי.
+
+   
+  
+  </tbody>
+</table>
+
+<details>
+<summary><strong>לחץ להצגת הקוד המלא (Python)</strong></summary>
+
+<br>
+
+```python
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import numpy as np
+
+print("--- מתחיל יצירת גרף ריבועים ---")
+
+# ==========================================
+# 1. טעינת ועיבוד נתונים (כמו בקוד שעבד לנו)
+# ==========================================
+if 'df' in locals():
+    raw_df = df.copy()
+else:
+    raise ValueError("❌ לא נמצא משתנה df. טען את הקובץ מחדש.")
+
+# חישוב משך זמן ביקור (מתוך הטקסט "06:29-08:43")
+raw_df['Revenue'] = pd.to_numeric(raw_df['Revenue'], errors='coerce').fillna(0)
+
+try:
+    time_split = raw_df['זמן ביקור'].astype(str).str.split('-', expand=True)
+    start_times = pd.to_datetime(time_split[0], format='%H:%M', errors='coerce')
+    end_times = pd.to_datetime(time_split[1], format='%H:%M', errors='coerce')
+    raw_df['Duration_Mins'] = (end_times - start_times).dt.total_seconds() / 60
+    print("✅ זמנים חושבו בהצלחה.")
+except:
+    # גיבוי למקרה שהפורמט שונה
+    raw_df['Duration_Mins'] = (pd.to_datetime(raw_df['זמן סיום'], errors='coerce') - 
+                               pd.to_datetime(raw_df['זמן התחלה'], errors='coerce')).dt.total_seconds() / 60
+
+# סינון
+mask = (raw_df['Revenue'] > 0) & (raw_df['Duration_Mins'] > 0) & (raw_df['Duration_Mins'] < 180)
+df_plot = raw_df[mask].copy()
+
+# אגרגציה
+df_city_level = df_plot.groupby('City').agg({
+    'Revenue': 'sum', 
+    'Duration_Mins': 'mean', 
+    'Date': 'count'
+}).reset_index()
+
+# שמות ומדדים
+df_city_level.columns = ['City', 'Revenue', 'Duration_Mins', 'Date'] # יישור שמות
+df_city_level['Avg_Order'] = df_city_level['Revenue'] / df_city_level['Date']
+df_city_level['RPM'] = df_city_level['Revenue'] / (df_city_level['Duration_Mins'] * df_city_level['Date'])
+
+# שמות לעברית
+df_city_level = df_city_level.rename(columns={
+    'City': 'עיר', 'Revenue': 'סה"כ הכנסות', 'Duration_Mins': 'זמן ביקור ממוצע',
+    'Date': 'נפח פעילות (מספר ביקורים)', 'Avg_Order': 'גודל הזמנה ממוצע', 'RPM': 'יעילות תפעולית (₪ לדקה)'
+})
+
+# 10 הערים המובילות
+df_top10 = df_city_level.sort_values('סה"כ הכנסות', ascending=False).head(10)
+
+# ==========================================
+# 2. בניית הגרף (עם ריבועים!)
+# ==========================================
+
+avg_time = df_top10['זמן ביקור ממוצע'].mean()
+avg_rev = df_top10['סה"כ הכנסות'].mean()
+
+fig = px.scatter(
+    df_top10,
+    x="זמן ביקור ממוצע",
+    y='סה"כ הכנסות',
+    size="נפח פעילות (מספר ביקורים)", # גודל הריבוע
+    color="עיר",
+    text="עיר",
+    hover_data={"עיר": False, "סה\"כ הכנסות": ':,.0f', "זמן ביקור ממוצע": ':.1f', "נפח פעילות (מספר ביקורים)": True},
+    title="מטריצת ביצועים אסטרטגית: ניתוח יעילות ערים",
+    template="plotly_white",
+    height=750
+)
+
+# --- השינוי המרכזי: הפיכת העיגולים לריבועים ---
+fig.update_traces(
+    marker_symbol='square',  # <=== זה מה שהופך לריבועים
+    textposition='top center', 
+    textfont_weight="bold", 
+    marker=dict(line=dict(width=1.5, color='white'), opacity=0.9)
+)
+
+# ==========================================
+# 3. עיצוב רקעים ותוויות
+# ==========================================
+x_min, x_max = df_top10['זמן ביקור ממוצע'].min() * 0.9, df_top10['זמן ביקור ממוצע'].max() * 1.1
+y_min, y_max = df_top10['סה"כ הכנסות'].min() * 0.9, df_top10['סה"כ הכנסות'].max() * 1.1
+
+# רקעים פסטליים
+fig.add_shape(type="rect", x0=x_min, y0=avg_rev, x1=avg_time, y1=y_max, fillcolor="#D4EFDF", opacity=0.5, layer="below", line_width=0)
+fig.add_shape(type="rect", x0=avg_time, y0=y_min, x1=x_max, y1=avg_rev, fillcolor="#FADBD8", opacity=0.5, layer="below", line_width=0)
+fig.add_shape(type="rect", x0=avg_time, y0=avg_rev, x1=x_max, y1=y_max, fillcolor="#FAE5D3", opacity=0.5, layer="below", line_width=0)
+fig.add_shape(type="rect", x0=x_min, y0=y_min, x1=avg_time, y1=avg_rev, fillcolor="#D6EAF8", opacity=0.5, layer="below", line_width=0)
+
+# קווים לבנים
+fig.add_vline(x=avg_time, line_dash="solid", line_color="white", line_width=3)
+fig.add_hline(y=avg_rev, line_dash="solid", line_color="white", line_width=3)
+
+# תוויות בפינות
+def add_label(x, y, text, color, align, x_shift, y_shift):
+    fig.add_annotation(x=x, y=y, text=f"<b>{text}</b>", showarrow=False, font=dict(size=14, color=color, family="Arial Black"), bgcolor="rgba(255,255,255,0.6)", xanchor=align, xshift=x_shift, yshift=y_shift)
+
+add_label(x_min, y_max, "💎 מצטיינים", "#196F3D", "left", 10, -10)
+add_label(x_max, y_min, "⚠️ ביצועים נמוכים", "#943126", "right", -10, 10)
+add_label(x_max, y_max, "🔨 דורש התייעלות", "#AF601A", "right", -10, -10)
+add_label(x_min, y_min, "🚀 פוטנציאל", "#2874A6", "left", 10, 10)
+
+fig.update_layout(
+    showlegend=False, 
+    margin=dict(t=90, b=60, l=60, r=60), 
+    xaxis=dict(title="<b>משך ביקור ממוצע (דקות)</b> ", range=[x_min, x_max]),
+    yaxis=dict(title="<b>סה\"כ הכנסות (₪)</b>", range=[y_min, y_max])
+)
+
+# שמירה
+try:
+    fig.write_image("Strategic_Matrix_Squares.png", scale=3, width=1200, height=800)
+    print("✅ תמונה נשמרה: Strategic_Matrix_Squares.png")
+except:
+    print("⚠️ לא ניתן לשמור תמונה אוטומטית.")
+
+fig.show()
+```
+</details>
+
+<br>
+
+### 📊 Visualization Output (Screenshot)
+
+<div align="center">
+  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/Strategic_Matrix_Squares.png?raw=true"
+       alt="Strategic Efficiency Matrix"
+       width="85%"
+       style="border: 1px solid #ccc; border-radius: 8px;">
+</div>
+<a href="https://htmlpreview.github.io/?https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/strategic_matrix_squares.html" target="_blank">
+    <img src="https://img.shields.io/badge/VIEW_INTERACTIVE_GRAPH-Click_Here-brightgreen?style=for-the-badge&logo=html5&logoColor=white" alt="View Interactive Graph">
+  </a>
+  
+  <p style="font-size: 14px; color: #555;">
+    👆 <b>לחץ על הכפתור הירוק כדי לשחק עם הנתונים בזמן אמת</b>
+  </p>
+</div>
+
+<br>
+
+## הסבר על הגרף
+
+הויזואליזציה מאפשרת לנו לראות שהערים המובילות (ברביע הירוק) אינן מתאפיינות רק בהכנסות גבוהות, אלא גם בביקורים קצרים וממוקדים – מה שמעיד על תהליך מכירה "חד" ויעיל. לעומת זאת, ככל שזזים ימינה במטריצה (לכיוון האדום/כתום), הגרף ממחיש "בזבוז משאבים": הריבועים נשארים גדולים (נפח פעילות גבוה), אך נמתחים על פני זמן רב מדי ללא עלייה תואמת בהכנסה. מה שמעיד כנראה על עיכובים לוגיסטיים או "זמן מת" שבו הסוכן ממתין בסניף ללא מעש.
+
+
