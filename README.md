@@ -833,17 +833,14 @@ fig.show()
        style="border: 1px solid #ccc; border-radius: 8px;">
 </div>
 <a href="https://htmlpreview.github.io/?https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/strategic_matrix_squares.html" target="_blank">
-    <img src="https://img.shields.io/badge/VIEW_INTERACTIVE-Click_Here-brightgreen?style=for-the-badge&logo=html5" alt="View Graph">
-  </a>
-
-  &nbsp; &nbsp; <a href="https://github.com/orelgrBGU/Diplomat_Visualization/raw/main/strategic_matrix_squares.html" download>
-    <img src="https://img.shields.io/badge/DOWNLOAD_FILE-Save_to_Desktop-blue?style=for-the-badge&logo=github" alt="Download File">
+    <img src="https://img.shields.io/badge/VIEW_INTERACTIVE_GRAPH-Click_Here-brightgreen?style=for-the-badge&logo=html5&logoColor=white" alt="View Interactive Graph">
   </a>
   
   <p style="font-size: 14px; color: #555;">
-    👆 <b>אופציה 1:</b> צפייה ישירה בדפדפן | <b>אופציה 2:</b> הורדת הקובץ (יש ללחוץ, ואז "שמור בשם" / Save As)
+    👆 <b>לחץ על הכפתור הירוק כדי לשחק עם הנתונים בזמן אמת</b>
   </p>
 </div>
+
 <br>
 
 ## הסבר על הגרף
