@@ -310,7 +310,7 @@ plt.show()
 
 ## הסבר על הגרף 
 
-הויזואליזציה  היא מאפשרת לנו לראות ששעות השיא (10:00-13:00) אינן מתאפיינות רק בכמות ביקורים גבוהה אלא גם על מעידים על פגישות ארוכות מדיי של סוכנים בסניפים. לעומת זאת, ככל שמתקרבים לסוף היום (החל מ-16:00), הגרף ממחיש דעיכה העמודות לא רק מתנמכות, אלא משנות את צבען לכחול דומיננטי  מה שמעיד על לחץ אולי לסיים את העבודה מהר ולהגיע הביתה או שאולי אנשי הממשק הנדרשים נמצאים יותר בשעות הצהריים ושם יש ריכוז מאמץ על ההזמנות אולי שווה לשקול שסוכנים יפוזורו יותר בשעות הצהריים מאשר בשעות הערב.
+  הויזואליזציה  היא מאפשרת לנו לראות ששעות השיא (10:00-13:00) אינן מתאפיינות רק בכמות ביקורים גבוהה אלא גם על מעידים על פגישות ארוכות מדיי של סוכנים בסניפים. לעומת זאת, ככל שמתקרבים לסוף היום (החל מ-16:00), הגרף ממחיש דעיכה העמודות לא רק מתנמכות, אלא משנות את צבען לכחול דומיננטי  מה שמעיד על לחץ אולי לסיים את העבודה מהר ולהגיע הביתה או שאולי אנשי הממשק הנדרשים נמצאים יותר בשעות הצהריים ושם יש ריכוז מאמץ על ההזמנות אולי שווה לשקול שסוכנים יפוזורו יותר בשעות הצהריים מאשר בשעות הערב.
 
 
 # ויזואליזציה 2
@@ -672,19 +672,19 @@ plt.show()
     <tr>
       <td><strong>What – מה מוצג?</strong></td>
       <td>
- הגרף מציג תרשים בועות (Bubble Chart) הממפה את 10 הערים המובילות בחברה על גבי "מטריצת יעילות". כל בועה מייצגת עיר, כאשר מיקומה נקבע על פי שני מדדים קריטיים: משך הביקור הממוצע (ציר X) וסך ההכנסות המצטבר (ציר Y). בנוסף, גודל הבועה משקף את נפח הפעילות (מספר הביקורים באותה עיר), ורקע הגרף מחולק לארבעה רביעים צבעוניים המסווגים את הערים לפי רמת הביצועים שלהן (למשל: "מצטיינים", "דורש התייעלות").
+ הגרף מציג מטריצת פיזור (Scatter Matrix) של 10 הערים המובילות בחברה, הממופות על בסיס שני צירים: משך הביקור הממוצע בדקות (ציר X) וסך ההכנסות המצטבר (ציר Y). כל עיר מיוצגת על ידי סמן בצורת ריבוע, כאשר שטח הריבוע משקף את נפח הפעילות (מספר הביקורים באותה עיר). הרקע מחולק לארבעה אזורי יעילות ("רביעים") בצבעים פסטליים, המסווגים את הערים ל: מצטיינים, טעוני שיפור, ביצועים נמוכים ופוטנציאל לא ממומש.
       </td>
     </tr>
     <tr>
       <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
       <td>
-מטרה היא לעבור מניתוח חד-ממדי של "כמה מכרנו" לניתוח רב-ממדי של "כמה יעילים היינו". הגרף נבחר כי הוא חושף מיידית את היחס בין המאמץ המושקע (זמן) לתוצאה (כסף) – קשר שלעיתים נעלם בטבלאות רגילות. החלוקה הוויזואלית לרביעים אסטרטגיים הופכת את הנתונים לסיפור עסקי ברור (Storytelling), ומאפשרת למנהלים לזהות במבט אחד היכן יש "כסף על הרצפה" (ביקורים ארוכים ללא תמורה) והיכן יש לשמר הצלחה (מכירות גבוהות בזמן קצר).
+המטרה העסקית היא לנתח את היעילות התפעולית (ROI על זמן עבודה). מבחינה ויזואלית, הבחירה בריבועים (Squares) במקום בעיגולים קלאסיים נעשתה מתוך שיקול תפיסתי-קוגניטיבי: המחקר מראה שלעין האנושית קל יותר להשוות ולמדוד הבדלי גודל (שטח) בין צורות בעלות קווים ישרים ופינות מאשר בין עיגולים. עיצוב זה מאפשר למנהל לזהות במדויק ערים שבהן מושקעת "מסה" גדולה של ביקורים (ריבועים גדולים) ללא תמורה כספית הולמת.
       </td>
     </tr>
     <tr>
       <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
       <td>
-  הוויזואליזציה משתמשת בקידוד משולש: מיקום מרחבי (Position) להצגת היעילות, שטח (Area) להצגת נפח הפעילות, וצבעי רקע (Background Zones) להגדרת הבנצ'מארק (המדד להשוואה). הנתונים עברו אגרגציה לפי עיר, תוך חישוב ממוצעים וסכומים. כדי למנוע עומס, נעשה שימוש בצבעים פסטליים רכים להפרדת הרביעים, והוספו שכבות מידע אינטראקטיביות (Tooltips) החושפות מדדי עומק נוספים – כמו "גודל הזמנה ממוצע" ו"יעילות שקלית לדקה" – רק כאשר המשתמש מתמקד בבועה ספציפית.
+  הנתונים עברו תהליך ETL שכלל המרה (Parsing) של טווחי שעות טקסטואליים לערכים מספריים (Duration), וסינון חריגים (Outliers). לאחר אגרגציה לפי עיר, הנתונים הוצגו באמצעות ספריית Plotly. הגרף כולל שכבת אינטראקטיביות מתקדמת , נעשה שימוש בצבעים פסטליים רכים להפרדת הרביעים, והוספו שכבות מידע אינטראקטיביות (Tooltips) החושפות מדדי עומק נוספים – כמו "גודל הזמנה ממוצע" ו"יעילות שקלית לדקה" – רק כאשר המשתמש מתמקד בריבוע ספציפי.
 
    
   
@@ -697,132 +697,126 @@ plt.show()
 <br>
 
 ```python
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import numpy as np
 
-# --- 1. עיבוד נתונים (זהה לקודם) ---
+print("--- מתחיל יצירת גרף ריבועים ---")
+
+# ==========================================
+# 1. טעינת ועיבוד נתונים (כמו בקוד שעבד לנו)
+# ==========================================
+if 'df' in locals():
+    raw_df = df.copy()
+else:
+    raise ValueError("❌ לא נמצא משתנה df. טען את הקובץ מחדש.")
+
+# חישוב משך זמן ביקור (מתוך הטקסט "06:29-08:43")
+raw_df['Revenue'] = pd.to_numeric(raw_df['Revenue'], errors='coerce').fillna(0)
+
+try:
+    time_split = raw_df['זמן ביקור'].astype(str).str.split('-', expand=True)
+    start_times = pd.to_datetime(time_split[0], format='%H:%M', errors='coerce')
+    end_times = pd.to_datetime(time_split[1], format='%H:%M', errors='coerce')
+    raw_df['Duration_Mins'] = (end_times - start_times).dt.total_seconds() / 60
+    print("✅ זמנים חושבו בהצלחה.")
+except:
+    # גיבוי למקרה שהפורמט שונה
+    raw_df['Duration_Mins'] = (pd.to_datetime(raw_df['זמן סיום'], errors='coerce') - 
+                               pd.to_datetime(raw_df['זמן התחלה'], errors='coerce')).dt.total_seconds() / 60
+
+# סינון
+mask = (raw_df['Revenue'] > 0) & (raw_df['Duration_Mins'] > 0) & (raw_df['Duration_Mins'] < 180)
+df_plot = raw_df[mask].copy()
+
+# אגרגציה
 df_city_level = df_plot.groupby('City').agg({
-    'Revenue': 'sum',            
-    'Duration_Mins': 'mean',     
-    'Date': 'count'              
+    'Revenue': 'sum', 
+    'Duration_Mins': 'mean', 
+    'Date': 'count'
 }).reset_index()
 
+# שמות ומדדים
+df_city_level.columns = ['City', 'Revenue', 'Duration_Mins', 'Date'] # יישור שמות
 df_city_level['Avg_Order'] = df_city_level['Revenue'] / df_city_level['Date']
 df_city_level['RPM'] = df_city_level['Revenue'] / (df_city_level['Duration_Mins'] * df_city_level['Date'])
 
+# שמות לעברית
 df_city_level = df_city_level.rename(columns={
-    'City': 'עיר',
-    'Revenue': 'סה"כ הכנסות',
-    'Duration_Mins': 'זמן ביקור ממוצע',
-    'Date': 'נפח פעילות (מספר ביקורים)',
-    'Avg_Order': 'גודל הזמנה ממוצע',
-    'RPM': 'יעילות תפעולית (₪ לדקה)'
+    'City': 'עיר', 'Revenue': 'סה"כ הכנסות', 'Duration_Mins': 'זמן ביקור ממוצע',
+    'Date': 'נפח פעילות (מספר ביקורים)', 'Avg_Order': 'גודל הזמנה ממוצע', 'RPM': 'יעילות תפעולית (₪ לדקה)'
 })
 
+# 10 הערים המובילות
 df_top10 = df_city_level.sort_values('סה"כ הכנסות', ascending=False).head(10)
+
+# ==========================================
+# 2. בניית הגרף (עם ריבועים!)
+# ==========================================
 
 avg_time = df_top10['זמן ביקור ממוצע'].mean()
 avg_rev = df_top10['סה"כ הכנסות'].mean()
 
-# --- 2. יצירת הגרף ---
 fig = px.scatter(
     df_top10,
     x="זמן ביקור ממוצע",
     y='סה"כ הכנסות',
-    size="נפח פעילות (מספר ביקורים)",
+    size="נפח פעילות (מספר ביקורים)", # גודל הריבוע
     color="עיר",
     text="עיר",
-    hover_data={
-        "עיר": False,
-        "סה\"כ הכנסות": ':,.0f',
-        "זמן ביקור ממוצע": ':.1f',
-        "נפח פעילות (מספר ביקורים)": True,
-        "גודל הזמנה ממוצע": ':,.0f',
-        "יעילות תפעולית (₪ לדקה)": ':.2f'
-    },
+    hover_data={"עיר": False, "סה\"כ הכנסות": ':,.0f', "זמן ביקור ממוצע": ':.1f', "נפח פעילות (מספר ביקורים)": True},
     title="מטריצת ביצועים אסטרטגית: ניתוח יעילות ערים",
     template="plotly_white",
-    height=700
+    height=750
 )
 
-# --- 3. עיצוב הרביעים בצבעים פסטליים מובחנים ---
-# הגדרת גבולות לרקע
+# --- השינוי המרכזי: הפיכת העיגולים לריבועים ---
+fig.update_traces(
+    marker_symbol='square',  # <=== זה מה שהופך לריבועים
+    textposition='top center', 
+    textfont_weight="bold", 
+    marker=dict(line=dict(width=1.5, color='white'), opacity=0.9)
+)
+
+# ==========================================
+# 3. עיצוב רקעים ותוויות
+# ==========================================
 x_min, x_max = df_top10['זמן ביקור ממוצע'].min() * 0.9, df_top10['זמן ביקור ממוצע'].max() * 1.1
 y_min, y_max = df_top10['סה"כ הכנסות'].min() * 0.9, df_top10['סה"כ הכנסות'].max() * 1.1
 
-# רביע 1: יהלומים -> ירוק מנטה פסטלי (#D4EFDF)
-fig.add_shape(type="rect",
-    x0=x_min, y0=avg_rev, x1=avg_time, y1=y_max,
-    fillcolor="#D4EFDF", opacity=0.5, layer="below", line_width=0,
-)
-# רביע 4: ביצועים נמוכים -> אדום ורד פסטלי (#FADBD8)
-fig.add_shape(type="rect",
-    x0=avg_time, y0=y_min, x1=x_max, y1=avg_rev,
-    fillcolor="#FADBD8", opacity=0.5, layer="below", line_width=0,
-)
-# רביע 2: דורש התייעלות -> כתום אפרסק פסטלי (#FAE5D3)
-fig.add_shape(type="rect",
-    x0=avg_time, y0=avg_rev, x1=x_max, y1=y_max,
-    fillcolor="#FAE5D3", opacity=0.5, layer="below", line_width=0,
-)
-# רביע 3: פוטנציאל -> תכלת שמיים פסטלי (#D6EAF8)
-fig.add_shape(type="rect",
-    x0=x_min, y0=y_min, x1=avg_time, y1=avg_rev,
-    fillcolor="#D6EAF8", opacity=0.5, layer="below", line_width=0,
-)
+# רקעים פסטליים
+fig.add_shape(type="rect", x0=x_min, y0=avg_rev, x1=avg_time, y1=y_max, fillcolor="#D4EFDF", opacity=0.5, layer="below", line_width=0)
+fig.add_shape(type="rect", x0=avg_time, y0=y_min, x1=x_max, y1=avg_rev, fillcolor="#FADBD8", opacity=0.5, layer="below", line_width=0)
+fig.add_shape(type="rect", x0=avg_time, y0=avg_rev, x1=x_max, y1=y_max, fillcolor="#FAE5D3", opacity=0.5, layer="below", line_width=0)
+fig.add_shape(type="rect", x0=x_min, y0=y_min, x1=avg_time, y1=avg_rev, fillcolor="#D6EAF8", opacity=0.5, layer="below", line_width=0)
 
-# קווי הפרדה מודגשים בלבן או אפור כהה לשבירת הצבעים
+# קווים לבנים
 fig.add_vline(x=avg_time, line_dash="solid", line_color="white", line_width=3)
 fig.add_hline(y=avg_rev, line_dash="solid", line_color="white", line_width=3)
 
-# --- 4. כיתובים (מותאמים לצבעי הפסטל) ---
-def add_quadrant_label(x, y, text, color, align="left", bg_color="rgba(255,255,255,0.6)"):
-    fig.add_annotation(
-        x=x, y=y,
-        text=f"<b>{text}</b>",
-        showarrow=False,
-        font=dict(size=15, color=color, family="Arial Black"), 
-        bgcolor=bg_color,
-        bordercolor=color,
-        borderwidth=0, # הורדתי גבול כדי שיראה נקי על הפסטל
-        borderpad=5,
-        xanchor=align
-    )
+# תוויות בפינות
+def add_label(x, y, text, color, align, x_shift, y_shift):
+    fig.add_annotation(x=x, y=y, text=f"<b>{text}</b>", showarrow=False, font=dict(size=14, color=color, family="Arial Black"), bgcolor="rgba(255,255,255,0.6)", xanchor=align, xshift=x_shift, yshift=y_shift)
 
-# שימוש בצבעים כהים יותר לטקסט כדי שיהיה קריא על הרקע הבהיר
-add_quadrant_label(x_min, y_max, " מצטיינים<br>(יעיל ורווחי)", "#196F3D", "left")   # ירוק כהה
-add_quadrant_label(x_max, y_min, " ביצועים נמוכים<br>(איטי ולא רווחי)", "#943126", "right") # אדום כהה
-add_quadrant_label(x_max, y_max, " דורש התייעלות<br>(רווחי אך איטי)", "#AF601A", "right")  # כתום/חום
-add_quadrant_label(x_min, y_min, " פוטנציאל צמיחה<br>(מהיר אך הכנסה נמוכה)", "#2874A6", "left") # כחול כהה
-
-# --- 5. עיצוב סופי ---
-fig.update_traces(
-    textposition='top center', 
-    textfont_size=13,
-    textfont_weight="bold",
-    marker=dict(line=dict(width=1.5, color='white'), opacity=0.9) # מסגרת לבנה לבועות שתבלוט על הפסטל
-)
+add_label(x_min, y_max, "💎 מצטיינים", "#196F3D", "left", 10, -10)
+add_label(x_max, y_min, "⚠️ ביצועים נמוכים", "#943126", "right", -10, 10)
+add_label(x_max, y_max, "🔨 דורש התייעלות", "#AF601A", "right", -10, -10)
+add_label(x_min, y_min, "🚀 פוטנציאל", "#2874A6", "left", 10, 10)
 
 fig.update_layout(
-    title=dict(
-        text="<b>מטריצת ביצועים אסטרטגית</b><br><sup>ניתוח 10 הערים המובילות בחלוקה לאזורי יעילות</sup>",
-        x=0.5,
-        font=dict(size=24)
-    ),
-    xaxis=dict(
-        title="<b>משך ביקור ממוצע (דקות)</b> ",
-        gridcolor='white', # גריד לבן משתלב יפה עם פסטל
-        range=[x_min, x_max]
-    ),
-    yaxis=dict(
-        title="<b>סה\"כ הכנסות (₪)</b>",
-        gridcolor='white',
-        range=[y_min, y_max]
-    ),
-    showlegend=False,
-    margin=dict(t=90, b=60, l=60, r=60),
-    plot_bgcolor='white'
+    showlegend=False, 
+    margin=dict(t=90, b=60, l=60, r=60), 
+    xaxis=dict(title="<b>משך ביקור ממוצע (דקות)</b> ", range=[x_min, x_max]),
+    yaxis=dict(title="<b>סה\"כ הכנסות (₪)</b>", range=[y_min, y_max])
 )
+
+# שמירה
+try:
+    fig.write_image("Strategic_Matrix_Squares.png", scale=3, width=1200, height=800)
+    print("✅ תמונה נשמרה: Strategic_Matrix_Squares.png")
+except:
+    print("⚠️ לא ניתן לשמור תמונה אוטומטית.")
 
 fig.show()
 ```
@@ -843,6 +837,4 @@ fig.show()
 
 ## הסבר על הגרף 
 
-הגרף הזה בעצם שם לנו תובנה מעניינת: אנחנו רואים שזמן עבודה לא בהכרח שווה לכסף. הערים בצד שמאל  הן ההוכחה שאפשר 'לתקתק' עבודה – להיכנס  למכור ולצאת ביעילות.
-
-לעומת זאת, הבועות שבורחות ימינה מראות לנו איפה הסוכנים 'נתקעים' או נמרחים בסניפים יותר מדי זמן בלי הצדקה במכירות.
+הויזואליזציה מאפשרת לנו לראות שהערים המובילות (ברביע הירוק) אינן מתאפיינות רק בהכנסות גבוהות, אלא גם בביקורים קצרים וממוקדים – מה שמעיד על תהליך מכירה "חד" ויעיל. לעומת זאת, ככל שזזים ימינה במטריצה (לכיוון האדום/כתום), הגרף ממחיש "בזבוז משאבים": הריבועים נשארים גדולים (נפח פעילות גבוה), אך נמתחים על פני זמן רב מדי ללא עלייה תואמת בהכנסה. מה שמעיד כנראה על עיכובים לוגיסטיים או "זמן מת" שבו הסוכן ממתין בסניף ללא מעש.
