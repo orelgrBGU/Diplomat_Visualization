@@ -846,3 +846,272 @@ fig.show()
 ## הסבר על הגרף
 
 הויזואליזציה מאפשרת לנו לראות שהערים המובילות (ברביע הירוק) אינן מתאפיינות רק בהכנסות גבוהות, אלא גם בביקורים קצרים וממוקדים – מה שמעיד על תהליך מכירה "חד" ויעיל. לעומת זאת, ככל שזזים ימינה במטריצה (לכיוון האדום/כתום), הגרף ממחיש "בזבוז משאבים": הריבועים נשארים גדולים (נפח פעילות גבוה), אך נמתחים על פני זמן רב מדי ללא עלייה תואמת בהכנסה. מה שמעיד כנראה על עיכובים לוגיסטיים או "זמן מת" שבו הסוכן ממתין בסניף ללא מעש.
+
+
+# ויזואליזציה 5
+## מודל WWH – הסבר על הוויזואליזציה
+
+<table dir="rtl">
+  <thead>
+    <tr>
+      <th>רכיב</th>
+      <th>תוכן</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>What – מה מוצג?</strong></td>
+      <td>
+ הוויזואליזציה מציגה Diverging Bar Chart (תרשים עמודות מתפצל) הממפה את איכות הניהול התפעולי של מנהלי הסוכנים. כל שורה מייצגת מנהל, והנתונים מנורמלים ל-100% פעילות. הציר המרכזי (האפס) מפריד בין שני עולמות: צד ימין (ירוק) מייצג ביקורים תקינים (שתוכננו ובוצעו), וצד שמאל (אדום/כתום) מייצג חריגות (ביקורים לא מתוכננים או שלא בוצעו כנדרש). בנוסף, כל צד מפוצל פנימית לפי ערוץ הפעילות: פיזי מול טלפוני.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
+      <td>
+ההמטרה העסקית היא לעבור ממדידת "כמות" למדידת "איכות ומשמעת". גרף עמודות רגיל היה מקשה להשוות את היחס בין תכנון לביצוע. הבחירה בגרף מתפצל (Diverging) היא אסטרטגית: היא מאפשרת למקבל ההחלטות לראות בבת-אחת את "המאזן" של כל מנהל. העין תופסת מיידית מי "ירוק" (ממושמע) ומי "אדום" (פועל ללא תכנון), ומונעת מהמספרים המוחלטים להסתיר בעיות התנהגותיות.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
+      <td>
+  הנתונים עברו אגרגציה וחישוב אחוזים יחסיים לכל מנהל. נעשה שימוש בקידוד צבע כפול: גוון (Hue) להפרדה בין טוב (ירוק) לרע (אדום), ובהירות (Lightness) להבחנה בין סוגי המדיה (פיזי/טלפוני). הטכניקה הוויזואלית נקראת Relative Stacking, המאפשרת השוואה הוגנת בין מנהלים ללא תלות בנפח הפעילות הכולל שלהם. האינטראקטיביות (Hover) חושפת את האחוזים המדויקים בכל פלח.
+
+   
+  
+  </tbody>
+</table>
+
+<details>
+<summary><strong>לחץ להצגת הקוד המלא (Python)</strong></summary>
+
+<br>
+
+```python
+import pandas as pd
+import plotly.graph_objects as go
+import io
+
+# =========================
+# 1. Load File
+# =========================
+
+try:
+    from google.colab import files
+    uploaded = files.upload()
+    filename = next(iter(uploaded))
+    file_bytes = uploaded[filename]
+
+    try:
+        df = pd.read_csv(io.BytesIO(file_bytes))
+    except:
+        df = pd.read_excel(io.BytesIO(file_bytes))
+
+except ImportError:
+    file_path = input("Enter full path to CSV or Excel file: ")
+    try:
+        df = pd.read_csv(file_path)
+    except:
+        df = pd.read_excel(file_path)
+
+print("File loaded successfully")
+
+# =========================
+# 2. Rename & Clean Columns
+# =========================
+
+df = df.rename(columns={
+    'מנהל סוכן ': 'Manager',
+    'האם תוכנן': 'Planned',
+    'האם תוכנן ובוצע': 'PlannedExecuted',
+    'האם ביקר בפועל': 'Visited',
+    'סוג ביקור': 'VisitType'
+})
+
+# Normalize VisitType (fix spelling + casing)
+df['VisitType'] = (
+    df['VisitType']
+    .astype(str)
+    .str.strip()
+    .replace({
+        'Fisical': 'Physical',
+        'fisical': 'Physical',
+        'Physical': 'Physical',
+        'Phone': 'Phone',
+        'phone': 'Phone'
+    })
+)
+
+df = df[
+    df['Planned'].isin([0, 1]) &
+    df['PlannedExecuted'].isin([0, 1]) &
+    df['Visited'].isin([0, 1]) &
+    df['VisitType'].isin(['Physical', 'Phone'])
+].copy()
+
+# =========================
+# 3. Classification Logic
+# =========================
+
+def classify(row):
+    # Planned and executed
+    if row['Planned'] == 1 and row['PlannedExecuted'] == 1 and row['Visited'] == 1:
+        return f"Planned & Executed – {row['VisitType']}"
+
+    # Unplanned but happened
+    if row['Planned'] == 0 and row['PlannedExecuted'] == 0 and row['Visited'] == 1:
+        return f"Not Compliant – {row['VisitType']}"
+
+    # Planned but not executed
+    if row['Planned'] == 1 and row['PlannedExecuted'] == 0 and row['Visited'] == 0:
+        return f"Not Compliant – {row['VisitType']}"
+
+    return None
+
+df['Category'] = df.apply(classify, axis=1)
+df = df[df['Category'].notna()]
+
+# =========================
+# 4. Distribution per Manager (Percent)
+# =========================
+
+counts = (
+    df
+    .groupby(['Manager', 'Category'])
+    .size()
+    .unstack(fill_value=0)
+)
+
+dist = counts.div(counts.sum(axis=1), axis=0) * 100
+
+cols = [
+    'Not Compliant – Physical',
+    'Not Compliant – Phone',
+    'Planned & Executed – Physical',
+    'Planned & Executed – Phone'
+]
+
+for c in cols:
+    if c not in dist.columns:
+        dist[c] = 0
+
+dist = dist[cols]
+managers = dist.index.tolist()
+
+# =========================
+# 5. Plotly Diverging Bar Chart
+# =========================
+
+fig = go.Figure()
+
+# Left side – Not Compliant
+fig.add_bar(
+    y=managers,
+    x=-dist['Not Compliant – Physical'],
+    name='Not Compliant – Physical',
+    orientation='h',
+    marker_color='#d73027',
+    customdata=dist['Not Compliant – Physical'],
+    hovertemplate='Not Compliant – Physical<br>Share: %{customdata:.1f}%<extra></extra>'
+)
+
+fig.add_bar(
+    y=managers,
+    x=-dist['Not Compliant – Phone'],
+    name='Not Compliant – Phone',
+    orientation='h',
+    marker_color='#fc8d59',
+    customdata=dist['Not Compliant – Phone'],
+    hovertemplate='Not Compliant – Phone<br>Share: %{customdata:.1f}%<extra></extra>'
+)
+
+# Right side – Planned & Executed
+fig.add_bar(
+    y=managers,
+    x=dist['Planned & Executed – Physical'],
+    name='Planned & Executed – Physical',
+    orientation='h',
+    marker_color='#1a9850',
+    hovertemplate='Planned & Executed – Physical<br>Share: %{x:.1f}%<extra></extra>'
+)
+
+fig.add_bar(
+    y=managers,
+    x=dist['Planned & Executed – Phone'],
+    name='Planned & Executed – Phone',
+    orientation='h',
+    marker_color='#66bd63',
+    hovertemplate='Planned & Executed – Phone<br>Share: %{x:.1f}%<extra></extra>'
+)
+
+fig.update_layout(
+    barmode='relative',
+    title=dict(
+        text='Planning and Execution Discipline by Manager<br><sup>Split by Visit Type</sup>',
+        x=0.5
+    ),
+    xaxis=dict(
+        title='Percentage of Visits',
+        range=[-100, 100],
+        tickvals=[-100, -75, -50, -25, 0, 25, 50, 75, 100],
+        ticktext=['100', '75', '50', '25', '0', '25', '50', '75', '100'],
+        zeroline=True,
+        zerolinewidth=2
+    ),
+    yaxis_title='Manager',
+    legend_title='Category',
+    template='plotly_white',
+    height=650
+)
+
+fig.show()
+
+# =========================
+# 6. Export to HTML + Download
+# =========================
+
+html_file = "planning_execution_discipline_by_manager.html"
+
+fig.write_html(
+    html_file,
+    config={
+        "scrollZoom": True,
+        "displayModeBar": True
+    }
+)
+
+try:
+    from google.colab import files
+    files.download(html_file)
+except:
+    pass
+
+```
+</details>
+
+<br>
+
+### 📊 Visualization Output (Screenshot)
+
+
+<div align="center">
+  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/newplot.png?raw=true"
+       alt="Planning Discipline Visualization"
+       width="85%"
+       style="border: 1px solid #ccc; border-radius: 8px;">
+
+  <br><br>
+  
+  <a href="https://htmlpreview.github.io/?https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/planning_discipline.html" target="_blank">
+    <img src="https://img.shields.io/badge/VIEW_INTERACTIVE_GRAPH-Click_Here-brightgreen?style=for-the-badge&logo=html5&logoColor=white" alt="View Interactive Graph">
+  </a>
+  
+  <p style="font-size: 14px; color: #555;">
+    👆 <b>לחץ על הכפתור הירוק כדי לשחק עם הנתונים בזמן אמת</b>
+  </p>
+</div>
+<br>
+
+## הסבר על הגרף
+
+הויזואליזציה מציגה את מדד "משמעת הביצוע" של המנהלים, כשהיא מחלקת את הפעילות לשני עולמות: צד ימין (הירוק) משקף עבודה תקינה שבוצעה בדיוק לפי התכנון, בעוד צד שמאל (האדום/כתום) חושף חריגות ועבודה לא מתוכננת.
+ניתן לראות בבירור דפוס מעניין: רוב החריגות והעבודה הלא-מתוכננת (בצד השמאלי) מתבצעות בטלפון (הגוונים הבהירים), בעוד שביקורים פיזיים נוטים להיות מתוכננים ומוקפדים יותר. הגרף מאפשר להנהלה לזהות במבט אחד מי מהמנהלים עובד בצורה מסודרת ושיטתית, ומי פועל בצורה ריאקטיבית של "כיבוי שריפות" ועיגול פינות מרחוק.
