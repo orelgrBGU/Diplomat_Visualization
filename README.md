@@ -824,17 +824,28 @@ fig.show()
 
 <br>
 
-### 📊 Visualization Output (Screenshot)
+### 📊 Visualization Output: Strategic Efficiency Matrix
 
 <div align="center">
-  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/duration_plot1.png?raw=true"
-       alt="Visit Duration Visualization"
-       width="80%"
-       style="border: 1px solid #ccc; border-radius: 8px;">
+  <a href="https://orelgrBGU.github.io/Diplomat_Visualization/strategic_matrix_squares.html" target="_blank">
+    
+    <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/Strategic_Matrix_Squares.png?raw=true"
+         alt="Strategic Matrix Visualization"
+         width="85%"
+         style="border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+  </a>
+  
+  <br><br>
+  
+  <a href="https://orelgrBGU.github.io/Diplomat_Visualization/strategic_matrix_squares.html" target="_blank">
+    <img src="https://img.shields.io/badge/INTERACTIVE-Click_Here_To_Explore-blue?style=for-the-badge&logo=plotly" alt="Open Interactive Graph">
+  </a>
+  
+  <p>👆 <b>לחץ על התמונה או על הכפתור כדי לפתוח את הגרף האינטראקטיבי</b></p>
 </div>
 
 <br>
 
-## הסבר על הגרף 
+## הסבר על הגרף
 
 הויזואליזציה מאפשרת לנו לראות שהערים המובילות (ברביע הירוק) אינן מתאפיינות רק בהכנסות גבוהות, אלא גם בביקורים קצרים וממוקדים – מה שמעיד על תהליך מכירה "חד" ויעיל. לעומת זאת, ככל שזזים ימינה במטריצה (לכיוון האדום/כתום), הגרף ממחיש "בזבוז משאבים": הריבועים נשארים גדולים (נפח פעילות גבוה), אך נמתחים על פני זמן רב מדי ללא עלייה תואמת בהכנסה. מה שמעיד כנראה על עיכובים לוגיסטיים או "זמן מת" שבו הסוכן ממתין בסניף ללא מעש.
