@@ -824,14 +824,16 @@ fig.show()
 
 <br>
 
-
 ### 📊 Visualization Output (Screenshot)
 
 <div align="center">
-  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/viz%203.png?raw=true"
-       alt="Conversion Rate Heatmap"
-       width="85%"
-       style="border: 1px solid #ccc; border-radius: 8px;">
+  <a href="https://orelgrBGU.github.io/Diplomat_Visualization/strategic_matrix_squares.html" target="_blank">
+    
+    <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/Strategic_Matrix_Squares.png?raw=true"
+         alt="Strategic Efficiency Matrix"
+         width="85%"
+         style="border: 1px solid #ccc; border-radius: 8px;">
+  </a>
 </div>
 
 
