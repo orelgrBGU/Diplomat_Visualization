@@ -1119,13 +1119,16 @@ files.download(html_file)
 
 ### 📊 Visualization Output (Screenshot)
 
+
 <div align="center">
-  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/Strategic_Matrix_Squares.png?raw=true"
-       alt="Strategic Efficiency Matrix"
+  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/newplot%20(3).png?raw=true"
+       alt="Sales Heatmap Visualization"
        width="85%"
        style="border: 1px solid #ccc; border-radius: 8px;">
-</div>
-<a href="https://htmlpreview.github.io/?https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/strategic_matrix_squares.html" target="_blank">
+
+  <br><br>
+  
+  <a href="https://htmlpreview.github.io/?https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/sales_heatmap_by_city.html" target="_blank">
     <img src="https://img.shields.io/badge/VIEW_INTERACTIVE_GRAPH-Click_Here-brightgreen?style=for-the-badge&logo=html5&logoColor=white" alt="View Interactive Graph">
   </a>
   
