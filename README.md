@@ -832,7 +832,10 @@ fig.show()
        width="85%"
        style="border: 1px solid #ccc; border-radius: 8px;">
 </div>
-
+<h3>
+    🔗 <a href="https://orelgrBGU.github.io/Diplomat_Visualization/strategic_matrix_squares.html" target="_blank">לחץ כאן לפתיחת הגרף האינטראקטיבי (HTML)</a>
+  </h3>
+</div>
 
 <br>
 
