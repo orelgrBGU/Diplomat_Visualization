@@ -181,19 +181,19 @@
   </thead>
   <tbody>
     <tr>
-      <td><strong>What – מה מוצג?</strong></td>
+      <td><strong>What</strong></td>
       <td>
  הגרף מציג את התפלגות הביקורים שבוצעו בפועל אצל לקוחות במהלך היום, בין השעות 07:00 ל־19:00. לכל ביקור חישבנו את משך הזמן בדקות,סיווגנו כל ביקור לשלוש קטגוריות זמן: ביקור קצר מאוד (“Touch & Go” – עד 10 דקות), ביקור סטנדרטי יעיל (10–45 דקות) וביקור ארוך או תקוע (מעל 45 דקות). בגרף רואים עבור כל שעה כמה ביקורים התרחשו, וכמה מהם שייכים לכל אחת משלוש הקטגוריות הללו.
       </td>
     </tr>
     <tr>
-      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
+      <td><strong>Why</strong></td>
       <td>
 הגרף מאפשר לזהות באילו שעות היום יש נפח ביקורים גבוה במיוחד, האם בשעות השיא יש בעיקר ביקורים קצרים ויעילים או דווקא הרבה ביקורים ארוכים, והאם יש חלונות זמן שבהם הסוכנים “נתקעים” אצל לקוחות על חשבון לקוחות אחרים ויכול לאפשר כמשוב לניהול זמן נכון יותר.
       </td>
     </tr>
     <tr>
-      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
+      <td><strong>How</strong></td>
       <td>
    הגרף הוא Stacked Bar Chart: בציר האופקי מופיע נתון אורדינלי על שעות היום (07:00–19:00), בציר האנכי מוצג מספר הביקורים בפועל. כל עמודה מייצגת את כלל הביקורים שנעשו באותה שעה, והעמודה מחולקת לפי צבעים  מוערמים בהתאם לקטגוריית משך הביקור שניתן לראות בו־זמנית גם את סך כל הביקורים בכל שעה וגם את ההרכב הפנימי שלהם.
 
@@ -297,7 +297,7 @@ plt.show()
 
 <br>
 
-### 📊 Visualization Output (Screenshot)
+###  Visualization Output 
 
 <div align="center">
   <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/duration_plot1.png?raw=true"
@@ -325,19 +325,19 @@ plt.show()
   </thead>
   <tbody>
     <tr>
-      <td><strong>What – מה מוצג?</strong></td>
+      <td><strong>What</strong></td>
       <td>
 הגרף מציג את התפלגות גובה העסקאות (Deal Size Distribution) בקרב עשרת הסוכנים המובילים בחברה. לכל סוכן מוצגת עקומת צפיפות (Density Plot) הממחישה את השכיחות של סכומי העסקה השונים, לצד נתונים מסכמים קריטיים: החציון האישי של הסוכן (קו לבן מרוסק), החציון הגלובלי של כלל החברה (קו אפור אנכי) ומספר העסקאות הכולל (N). הסוכנים מסודרים בציר האנכי לפי גובה החציון שלהם, בסדר יורד מהגבוה לנמוך.
       </td>
     </tr>
     <tr>
-      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
+      <td><strong>Why</strong></td>
       <td>
 המטרת הגרף היא לחשוף את "אישיות המכירה" של הסוכנים ולא להסתפק רק בשורת ההכנסה הסופית. הגרף מאפשר להבחין בצורה אינטואיטיבית בין סוכנים "ציידים" (המבצעים מעט עסקאות בשווי גבוה) לבין סוכנים "חקלאים" (המבססים את המחזור על נפח עצום של עסקאות קטנות). תצוגה זו נבחרה כי היא מונעת את העומס הוויזואלי שהיה נוצר בהצגת עשר היסטוגרמות נפרדות, ומאפשרת השוואה אנכית מיידית של יעילות המכירה מול הממוצע הארגוני.
       </td>
     </tr>
     <tr>
-      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
+      <td><strong>How</strong></td>
       <td>
   הוויזואליזציה בנויה כתרשים Ridge Plot (או Joyplot). ציר ה-X הוא ציר כמותי רציף המציג את סכום העסקה בשקלים, לאחר שעבר סינון של עסקאות זניחות (מתחת ל-50 ₪) וחיתוך (Zoom) באחוזון ה-96 כדי למנוע עיוות על ידי ערכי קיצון. הציר האנכי מפוצל לשורות נפרדות לכל סוכן (Faceting), כאשר עקומות הצפיפות חופפות מעט כדי לחסוך מקום ולייצר רצף ויזואלי. קו הייחוס הגלובלי ("Global Med") עובר לרוחב כל הגרפים ומספק בסיס קבוע להשוואת ביצועים.
 
@@ -470,7 +470,7 @@ plt.show()
 
 <br>
 
-### 📊 Visualization Output (Screenshot)
+### Visualization Output
 
 <div align="center">
   <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/viz%202.png?raw=true"
@@ -499,19 +499,19 @@ plt.show()
   </thead>
   <tbody>
     <tr>
-      <td><strong>What – מה מוצג?</strong></td>
+      <td><strong>What</strong></td>
       <td>
  הגרף מציג מפת חום (Heatmap) של אחוז ההמרה (Conversion Rate) בחלוקה לימי השבוע ולשעות הפעילות (07:00–19:00). כל תא במטריצה מייצג את הסבירות שלקוח שנכנס בשעה וביום מסוימים יבצע רכישה משמעותית (מעל 50 ₪). עוצמת הצבע (מבהיר לכהה) מעידה על גובה אחוז ההמרה, ובנוסף מופיע בתוך כל תא הערך המספרי המדויק באחוזים.
       </td>
     </tr>
     <tr>
-      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
+      <td><strong>Why</strong></td>
       <td>
 המטרה היא זיהוי דפוסים ומגמות לצורך אופטימיזציה של סידור העבודה. במקום לנחש מתי לשבץ סוכנים, הגרף מראה בבירור מתי העסק נמצא ב"דופק גבוה" (יעילות שיא) ומתי הוא ב"זמן מת". תצוגה זו נבחרה כי היא מונעת את העומס הוויזואלי שהיה נוצר בהצגת גרף קווי עם חמישה קווים חופפים ("ספגטי"), ומאפשרת סריקה הוליסטית ומהירה של כל השבוע במבט אחד.
       </td>
     </tr>
     <tr>
-      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
+      <td><strong>How</strong></td>
       <td>
   הוויזואליזציה משתמשת במיקום מרחבי על גבי גריד (מטריצה): ציר ה-X מייצג את שעות היממה וציר ה-Y את ימי השבוע. המשתנה הכמותי (אחוז ההמרה) מיוצג על ידי ערוץ הצבע (Color Saturation) בסקאלה רציפה של כחולים (תכלת עד כחול עמוק). הנתונים עברו אגרגציה (חישוב ממוצע) לכל שעה ויום, והתווספו תוויות טקסט מספריות לדיוק מקסימלי בקבלת ההחלטות.
 
@@ -532,7 +532,7 @@ import pandas as pd
 import numpy as np
 from matplotlib.colors import LinearSegmentedColormap
 
-# --- 1. Data Loading & Preparation ---
+#  Data Loading & Preparation 
 # Ensure 'df' is loaded. If running standalone, uncomment:
 # df = pd.read_csv('דאטא לויזואליזציה.xlsx - גיליון1.csv')
 
@@ -567,18 +567,17 @@ days_order = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']
 existing_days = [d for d in days_order if d in heatmap_data.index]
 heatmap_data = heatmap_data.reindex(existing_days)
 
-# --- 2. Smart Scaling & NEW Custom Palette ---
+#  Scaling & NEW Custom Palette 
 # Calculate 5th and 95th percentiles
 vmin_smart = np.nanpercentile(heatmap_data.values, 5)
 vmax_smart = np.nanpercentile(heatmap_data.values, 95)
 
-# NEW PALETTE: Visible Light Blue -> Deep Navy
-# #d1e3f0: Light Blue-Grey (Visible on white paper)
+
 # #08306b: Deep Navy (Strong contrast)
 colors = ["#d1e3f0", "#08306b"]
 custom_cmap = LinearSegmentedColormap.from_list("custom_navy", colors, N=100)
 
-# --- 3. Plotting ---
+#  Plotting 
 plt.figure(figsize=(12, 6))
 sns.set_theme(style="white")
 
@@ -594,7 +593,7 @@ ax = sns.heatmap(
     cbar_kws={'label': 'Conversion Rate (%)', 'shrink': 0.8}
 )
 
-# --- 4. Dynamic Text Color Logic ---
+# Dynamic Text Color Logic 
 threshold = (vmax_smart + vmin_smart) / 2
 
 for t in ax.texts:
@@ -608,7 +607,7 @@ for t in ax.texts:
     except ValueError:
         pass
 
-# --- 5. Styling Ticks & Labels ---
+#  Styling Ticks & Labels 
 ax.tick_params(axis='both', colors='#95a5a6', length=0)
 plt.xticks(rotation=0, fontsize=10, fontweight='bold', color='#7f8c8d')
 plt.yticks(rotation=0, fontsize=10, fontweight='bold', color='#7f8c8d')
@@ -638,7 +637,7 @@ plt.show()
 
 <br>
 
-### 📊 Visualization Output (Screenshot)
+###  Visualization Output 
 
 <div align="center">
   <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/viz%203.png?raw=true"
@@ -700,9 +699,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import io
 
-# =========================
-# 1. Load File
-# =========================
+
+# Load File
 
 try:
     from google.colab import files
@@ -724,9 +722,7 @@ except ImportError:
 
 print("File loaded successfully")
 
-# =========================
-# 2. Rename & Clean Columns
-# =========================
+#  Rename & Clean Columns
 
 df = df.rename(columns={
     'מנהל סוכן ': 'Manager',
@@ -757,9 +753,7 @@ df = df[
     df['VisitType'].isin(['Physical', 'Phone'])
 ].copy()
 
-# =========================
-# 3. Classification Logic
-# =========================
+# Classification Logic
 
 def classify(row):
     # Planned and executed
@@ -779,9 +773,7 @@ def classify(row):
 df['Category'] = df.apply(classify, axis=1)
 df = df[df['Category'].notna()]
 
-# =========================
-# 4. Distribution per Manager (Percent)
-# =========================
+# Distribution per Manager (Percent)
 
 counts = (
     df
@@ -806,9 +798,7 @@ for c in cols:
 dist = dist[cols]
 managers = dist.index.tolist()
 
-# =========================
-# 5. Plotly Diverging Bar Chart
-# =========================
+#  Plotly Diverging Bar Chart
 
 fig = go.Figure()
 
@@ -874,9 +864,7 @@ fig.update_layout(
 
 fig.show()
 
-# =========================
-# 6. Export to HTML + Download
-# =========================
+#  Export to HTML + Download
 
 html_file = "planning_execution_discipline_by_manager.html"
 
@@ -899,7 +887,7 @@ except:
 
 <br>
 
-### 📊 Visualization Output (Screenshot)
+### Visualization Output
 
 
 <div align="center">
@@ -939,19 +927,19 @@ except:
   </thead>
   <tbody>
     <tr>
-      <td><strong>What – מה מוצג?</strong></td>
+      <td><strong>What</strong></td>
       <td>
  הוויזואליזציה מציגה מפת חום גאוגרפית (Density Map) הממפה את היקף המכירות המצטבר בכל עיר בישראל. הנתונים מבוססים על קואורדינטות (Latitude/Longitude) של כל עיר, כאשר "עוצמת החום" (הצבע והבהירות) מייצגת את סך המכירות במיליוני שקלים. המפה משתמשת בסקאלת צבעים רציפה הנעה מצהוב (פעילות נמוכה) לאדום כהה (מוקדי כוח).
       </td>
     </tr>
     <tr>
-      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
+      <td><strong>Why</strong></td>
       <td>
 המטרה העסקית היא לזהות דפוסים מרחביים שקשה לראות בטבלאות אקסל רגילות. טבלה ממיינת ערים לפי שם או סכום, אך מנתקת אותן מההקשר הגיאוגרפי שלהן. מפת החום נבחרה כי היא מאפשרת למנהלים לזהות במבט אחד "כתמי נפט" של הצלחה (אזורים שבהם אנו שולטים בשוק) לעומת אזורים שבהם הפעילות דלילה מדי, ובכך לייעל את מערך ההפצה והלוגיסטיקה.
       </td>
     </tr>
     <tr>
-      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
+      <td><strong>How</strong></td>
       <td>
   התהליך כלל שלב Geocoding (המרה של שמות ערים לקואורדינטות GPS) באמצעות ספריית geopy. הנתונים הוצגו על גבי תשתית המפות של Mapbox בסגנון "Dark Matter" (רקע כהה), בחירה עיצובית שמבליטה את נקודות הצבע הזוהרות ומקלה על זיהוי מוקדים. האינטראקטיביות מאפשרת למשתמש לבצע Zoom-in לרמת הרחוב, ולרחף עם העכבר כדי לראות נתוני עומק מדוייקים לכל עיר (כמות הזמנות, סך קרטונים, ומכירות נטו).
 
@@ -987,12 +975,8 @@ try:
 except:
     df = pd.read_excel(io.BytesIO(file_bytes))
 
-print("File loaded successfully")
 
-# =========================
-# 2. Data Preparation
-# =========================
-
+#  Data Preparation
 df = df.rename(columns={
     'עיר': 'city',
     'סכום נטו הזמנה ': 'NetAmount',
@@ -1016,9 +1000,7 @@ city_agg = (
 
 city_agg['SALES_M'] = city_agg['TOTAL_SALES'] / 1_000_000
 
-# =========================
-# 3. Geocoding with Cache
-# =========================
+#  Geocoding with Cache
 
 coords_cache_path = "city_coords_cache_sales.csv"
 
@@ -1047,10 +1029,7 @@ city_agg[["city", "lat", "lon"]].dropna().to_csv(
 
 city_agg = city_agg.dropna(subset=["lat", "lon"])
 
-# =========================
-# 4. Map Visualization (English labels)
-# =========================
-
+#  Map Visualization 
 fig = px.density_mapbox(
     city_agg,
     lat="lat",
@@ -1071,7 +1050,6 @@ fig = px.density_mapbox(
     title="Sales Heatmap by City"
 )
 
-# Custom hover (clean English, no lat/lon)
 fig.update_traces(
     hovertemplate=
     "<b>%{hovertext}</b><br><br>"
@@ -1096,9 +1074,7 @@ fig.show(
     }
 )
 
-# =========================
-# 5. Export to HTML
-# =========================
+# Export to HTML
 
 html_file = "sales_heatmap_by_city.html"
 
@@ -1117,7 +1093,7 @@ files.download(html_file)
 
 <br>
 
-### 📊 Visualization Output (Screenshot)
+###  Visualization Output 
 
 
 <div align="center">
@@ -1158,19 +1134,19 @@ files.download(html_file)
   </thead>
   <tbody>
     <tr>
-      <td><strong>What – מה מוצג?</strong></td>
+      <td><strong>What</strong></td>
       <td>
  הגרף מציג מטריצת פיזור (Scatter Matrix) של 10 הערים המובילות בחברה, הממופות על בסיס שני צירים: משך הביקור הממוצע בדקות (ציר X) וסך ההכנסות המצטבר (ציר Y). כל עיר מיוצגת על ידי סמן בצורת ריבוע, כאשר שטח הריבוע משקף את נפח הפעילות (מספר הביקורים באותה עיר). הרקע מחולק לארבעה אזורי יעילות ("רביעים") בצבעים פסטליים, המסווגים את הערים ל: מצטיינים, טעוני שיפור, ביצועים נמוכים ופוטנציאל לא ממומש.
       </td>
     </tr>
     <tr>
-      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
+      <td><strong>Why</strong></td>
       <td>
 המטרה העסקית היא לנתח את היעילות התפעולית (ROI על זמן עבודה). מבחינה ויזואלית, הבחירה בריבועים (Squares) במקום בעיגולים קלאסיים נעשתה מתוך שיקול תפיסתי-קוגניטיבי: המחקר מראה שלעין האנושית קל יותר להשוות ולמדוד הבדלי גודל (שטח) בין צורות בעלות קווים ישרים ופינות מאשר בין עיגולים. עיצוב זה מאפשר למנהל לזהות במדויק ערים שבהן מושקעת "מסה" גדולה של ביקורים (ריבועים גדולים) ללא תמורה כספית הולמת.
       </td>
     </tr>
     <tr>
-      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
+      <td><strong>How</strong></td>
       <td>
   הנתונים עברו תהליך ETL שכלל המרה (Parsing) של טווחי שעות טקסטואליים לערכים מספריים (Duration), וסינון חריגים (Outliers). לאחר אגרגציה לפי עיר, הנתונים הוצגו באמצעות ספריית Plotly. הגרף כולל שכבת אינטראקטיביות מתקדמת , נעשה שימוש בצבעים פסטליים רכים להפרדת הרביעים, והוספו שכבות מידע אינטראקטיביות (Tooltips) החושפות מדדי עומק נוספים – כמו "גודל הזמנה ממוצע" ו"יעילות שקלית לדקה" – רק כאשר המשתמש מתמקד בריבוע ספציפי.
 
@@ -1190,17 +1166,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 
-print("--- מתחיל יצירת גרף ריבועים ---")
 
-# ==========================================
-# 1. טעינת ועיבוד נתונים (כמו בקוד שעבד לנו)
-# ==========================================
-if 'df' in locals():
-    raw_df = df.copy()
-else:
-    raise ValueError("❌ לא נמצא משתנה df. טען את הקובץ מחדש.")
-
-# חישוב משך זמן ביקור (מתוך הטקסט "06:29-08:43")
 raw_df['Revenue'] = pd.to_numeric(raw_df['Revenue'], errors='coerce').fillna(0)
 
 try:
@@ -1208,40 +1174,30 @@ try:
     start_times = pd.to_datetime(time_split[0], format='%H:%M', errors='coerce')
     end_times = pd.to_datetime(time_split[1], format='%H:%M', errors='coerce')
     raw_df['Duration_Mins'] = (end_times - start_times).dt.total_seconds() / 60
-    print("✅ זמנים חושבו בהצלחה.")
 except:
-    # גיבוי למקרה שהפורמט שונה
     raw_df['Duration_Mins'] = (pd.to_datetime(raw_df['זמן סיום'], errors='coerce') - 
                                pd.to_datetime(raw_df['זמן התחלה'], errors='coerce')).dt.total_seconds() / 60
 
-# סינון
+
 mask = (raw_df['Revenue'] > 0) & (raw_df['Duration_Mins'] > 0) & (raw_df['Duration_Mins'] < 180)
 df_plot = raw_df[mask].copy()
 
-# אגרגציה
 df_city_level = df_plot.groupby('City').agg({
     'Revenue': 'sum', 
     'Duration_Mins': 'mean', 
     'Date': 'count'
 }).reset_index()
 
-# שמות ומדדים
 df_city_level.columns = ['City', 'Revenue', 'Duration_Mins', 'Date'] # יישור שמות
 df_city_level['Avg_Order'] = df_city_level['Revenue'] / df_city_level['Date']
 df_city_level['RPM'] = df_city_level['Revenue'] / (df_city_level['Duration_Mins'] * df_city_level['Date'])
 
-# שמות לעברית
 df_city_level = df_city_level.rename(columns={
     'City': 'עיר', 'Revenue': 'סה"כ הכנסות', 'Duration_Mins': 'זמן ביקור ממוצע',
     'Date': 'נפח פעילות (מספר ביקורים)', 'Avg_Order': 'גודל הזמנה ממוצע', 'RPM': 'יעילות תפעולית (₪ לדקה)'
 })
 
-# 10 הערים המובילות
 df_top10 = df_city_level.sort_values('סה"כ הכנסות', ascending=False).head(10)
-
-# ==========================================
-# 2. בניית הגרף (עם ריבועים!)
-# ==========================================
 
 avg_time = df_top10['זמן ביקור ממוצע'].mean()
 avg_rev = df_top10['סה"כ הכנסות'].mean()
@@ -1259,7 +1215,6 @@ fig = px.scatter(
     height=750
 )
 
-# --- השינוי המרכזי: הפיכת העיגולים לריבועים ---
 fig.update_traces(
     marker_symbol='square',  # <=== זה מה שהופך לריבועים
     textposition='top center', 
@@ -1268,12 +1223,11 @@ fig.update_traces(
 )
 
 # ==========================================
-# 3. עיצוב רקעים ותוויות
+#
 # ==========================================
 x_min, x_max = df_top10['זמן ביקור ממוצע'].min() * 0.9, df_top10['זמן ביקור ממוצע'].max() * 1.1
 y_min, y_max = df_top10['סה"כ הכנסות'].min() * 0.9, df_top10['סה"כ הכנסות'].max() * 1.1
 
-# רקעים פסטליים
 fig.add_shape(type="rect", x0=x_min, y0=avg_rev, x1=avg_time, y1=y_max, fillcolor="#D4EFDF", opacity=0.5, layer="below", line_width=0)
 fig.add_shape(type="rect", x0=avg_time, y0=y_min, x1=x_max, y1=avg_rev, fillcolor="#FADBD8", opacity=0.5, layer="below", line_width=0)
 fig.add_shape(type="rect", x0=avg_time, y0=avg_rev, x1=x_max, y1=y_max, fillcolor="#FAE5D3", opacity=0.5, layer="below", line_width=0)
@@ -1299,12 +1253,7 @@ fig.update_layout(
     yaxis=dict(title="<b>סה\"כ הכנסות (₪)</b>", range=[y_min, y_max])
 )
 
-# שמירה
-try:
-    fig.write_image("Strategic_Matrix_Squares.png", scale=3, width=1200, height=800)
-    print("✅ תמונה נשמרה: Strategic_Matrix_Squares.png")
-except:
-    print("⚠️ לא ניתן לשמור תמונה אוטומטית.")
+ fig.write_image("Strategic_Matrix_Squares.png", scale=3, width=1200, height=800)
 
 fig.show()
 ```
@@ -1312,7 +1261,7 @@ fig.show()
 
 <br>
 
-### 📊 Visualization Output (Screenshot)
+### Visualization Output 
 
 <div align="center">
   <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/Strategic_Matrix_Squares.png?raw=true"
