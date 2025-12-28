@@ -1129,19 +1129,17 @@ files.download(html_file)
     <tr>
       <td><strong>What</strong></td>
       <td>
- הגרף מציג מטריצת פיזור (Scatter Matrix) של 10 הערים המובילות בחברה, הממופות על בסיס שני צירים: משך הביקור הממוצע בדקות (ציר X) וסך ההכנסות המצטבר (ציר Y). כל עיר מיוצגת על ידי סמן בצורת ריבוע, כאשר שטח הריבוע משקף את נפח הפעילות (מספר הביקורים באותה עיר). הרקע מחולק לארבעה אזורי יעילות ("רביעים") בצבעים פסטליים, המסווגים את הערים ל: מצטיינים, טעוני שיפור, ביצועים נמוכים ופוטנציאל לא ממומש.
-      </td>
-    </tr>
+ הנתונים מבוססים על רשומות תפעוליות שעברו אגרגציה (Aggregation) לרמת העיר, כך שכל פריט  מייצג סיכום פעילות גיאוגרפי ולא ביקור בודד. כל רשומה כוללת משתנה קטגוריאלי לזיהוי (שם העיר) ושלושה משתנים כמותיים: משך ביקור ממוצע (רציף), סך הכנסות (רציף), ומספר הביקורים. הטבלה מייצגת "תמונת מצב" סטטיסטית של היעילות התפעולית בערים המובילות.
     <tr>
       <td><strong>Why</strong></td>
       <td>
-המטרה העסקית היא לנתח את היעילות התפעולית (ROI על זמן עבודה). מבחינה ויזואלית, הבחירה בריבועים (Squares) במקום בעיגולים קלאסיים נעשתה מתוך שיקול תפיסתי-קוגניטיבי: המחקר מראה שלעין האנושית קל יותר להשוות ולמדוד הבדלי גודל (שטח) בין צורות בעלות קווים ישרים ופינות מאשר בין עיגולים. עיצוב זה מאפשר למנהל לזהות במדויק ערים שבהן מושקעת "מסה" גדולה של ביקורים (ריבועים גדולים) ללא תמורה כספית הולמת.
+הוויזואליזציה מאפשרת למנהלים לזהות מתאמים (Correlations) בין השקעת המשאבים (זמן הסוכן) לבין התוצאה העסקית הכנסות כסף לחברה בפועל בסופו של דבר, ולאתר חריגים (Outliers) – ערים שבהן זמן הביקור קצר אך ההכנסה גבוהה  שהם מייצגים הצטיינות, או להפך הכנסות נמוכות ובזבוז זמן יקר של סוכנים בסניפים. הגרף מציג את "פרופיל היעילות" של העיר: האם ההכנסות הגבוהות נובעות מביקורים קצרים וממוקדים, או שהן דורשות זמן רב.
       </td>
     </tr>
     <tr>
       <td><strong>How</strong></td>
       <td>
-  הנתונים עברו תהליך ETL שכלל המרה (Parsing) של טווחי שעות טקסטואליים לערכים מספריים (Duration), וסינון חריגים (Outliers). לאחר אגרגציה לפי עיר, הנתונים הוצגו באמצעות ספריית Plotly. הגרף כולל שכבת אינטראקטיביות מתקדמת , נעשה שימוש בצבעים פסטליים רכים להפרדת הרביעים, והוספו שכבות מידע אינטראקטיביות (Tooltips) החושפות מדדי עומק נוספים – כמו "גודל הזמנה ממוצע" ו"יעילות שקלית לדקה" – רק כאשר המשתמש מתמקד בריבוע ספציפי.
+ הנתונים מיוצגים באמצעות תרשים בועות (Bubble Chart), המהווה הרחבה של תרשים פיזור (Scatter Plot). שני המשתנים הרציפים מקודדים באמצעות מיקום מרחבי על גבי מערכת צירים משותפת: ציר ה-X מקודד את "ההשקעה" (זמן ביקור ממוצע), וציר ה-Y מקודד את "התפוקה" (סך הכנסות). המשתנה השלישי, נפח הפעילות, מקודד באמצעות ערוץ הגודל (Size/Area) של הסימן הגרפי, אשר עוצב כריבוע (Square Mark) כדי להבדיל בין גדלים בצורה יותר מעיגול לפי מה שלמדנו בהרצאות. השימוש בערוץ הצבע (Color Hue) הוא קטגוריאלי ומשמש לזיהוי (Identity) של הערים השונות.
 
    
   
@@ -1159,9 +1157,19 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 
+# ==========================================
+# 1. עיבוד נתונים (Data Processing)
+# ==========================================
 
+if 'df' in locals():
+    raw_df = df.copy()
+else:
+    print("Warning: 'df' not found. Please load your data first.")
+
+# ניקוי הכנסות
 raw_df['Revenue'] = pd.to_numeric(raw_df['Revenue'], errors='coerce').fillna(0)
 
+# חישוב משך זמן (Duration)
 try:
     time_split = raw_df['זמן ביקור'].astype(str).str.split('-', expand=True)
     start_times = pd.to_datetime(time_split[0], format='%H:%M', errors='coerce')
@@ -1171,82 +1179,147 @@ except:
     raw_df['Duration_Mins'] = (pd.to_datetime(raw_df['זמן סיום'], errors='coerce') - 
                                pd.to_datetime(raw_df['זמן התחלה'], errors='coerce')).dt.total_seconds() / 60
 
-
+# סינון נתונים תקינים
 mask = (raw_df['Revenue'] > 0) & (raw_df['Duration_Mins'] > 0) & (raw_df['Duration_Mins'] < 180)
 df_plot = raw_df[mask].copy()
 
+# אגרגציה לפי עיר
 df_city_level = df_plot.groupby('City').agg({
     'Revenue': 'sum', 
     'Duration_Mins': 'mean', 
     'Date': 'count'
 }).reset_index()
 
-df_city_level.columns = ['City', 'Revenue', 'Duration_Mins', 'Date'] # יישור שמות
-df_city_level['Avg_Order'] = df_city_level['Revenue'] / df_city_level['Date']
-df_city_level['RPM'] = df_city_level['Revenue'] / (df_city_level['Duration_Mins'] * df_city_level['Date'])
+# הסרת רווחים מיותרים
+df_city_level['City'] = df_city_level['City'].astype(str).str.strip()
 
+# ==========================================
+# 2. תרגום ועיבוד שמות (English Translation)
+# ==========================================
+
+city_map = {
+    'ירושלים': 'Jerusalem',
+    'תל אביב - יפו': 'Tel Aviv',
+    'תל אביב': 'Tel Aviv',
+    'תל-אביב': 'Tel Aviv',
+    'חיפה': 'Haifa',
+    'ראשון לציון': 'Rishon LeTsiyon',
+    'פתח תקווה': 'Petah Tikva',
+    'פתח-תקווה': 'Petah Tikva',
+    'אשדוד': 'Ashdod',
+    'נתניה': 'Netanya',
+    'באר שבע': 'Beersheba',
+    'בני ברק': 'Bnei Brak',
+    'חולון': 'Holon',
+    'רמת גן': 'Ramat Gan',
+    'אשקלון': 'Ashkelon',
+    'רחובות': 'Rehovot',
+    'בת ים': 'Bat Yam',
+    'בית שמש': 'Beit Shemesh',
+    'כפר סבא': 'Kfar Saba',
+    'הרצליה': 'Herzliya',
+    'חדרה': 'Hadera',
+    'מודיעין': 'Modiin',
+    'מודיעין מכבים רעות': 'Modiin',
+    'מודיעים מכבים רעות': 'Modiin',
+    'מודיעין-מכבים-רעות': 'Modiin',
+    'נצרת': 'Nazareth',
+    'לוד': 'Lod',
+    'רמלה': 'Ramla',
+    'רעננה': 'Ra\'anana',
+    'גבעתיים': 'Givatayim',
+    'הוד השרון': 'Hod HaSharon',
+    'קריית אתא': 'Kiryat Ata',
+    'נהריה': 'Nahariya',
+    'אילת': 'Eilat'
+}
+
+df_city_level['City'] = df_city_level['City'].map(city_map).fillna(df_city_level['City'])
+
+# שינוי שמות עמודות לאנגלית
 df_city_level = df_city_level.rename(columns={
-    'City': 'עיר', 'Revenue': 'סה"כ הכנסות', 'Duration_Mins': 'זמן ביקור ממוצע',
-    'Date': 'נפח פעילות (מספר ביקורים)', 'Avg_Order': 'גודל הזמנה ממוצע', 'RPM': 'יעילות תפעולית (₪ לדקה)'
+    'Revenue': 'Total Revenue',
+    'Duration_Mins': 'Avg Visit Duration',
+    'Date': 'Visit Count'
 })
 
-df_top10 = df_city_level.sort_values('סה"כ הכנסות', ascending=False).head(10)
+df_top10 = df_city_level.sort_values('Total Revenue', ascending=False).head(10)
 
-avg_time = df_top10['זמן ביקור ממוצע'].mean()
-avg_rev = df_top10['סה"כ הכנסות'].mean()
+# ==========================================
+# 3. בניית הגרף (Clean & Interactive)
+# ==========================================
 
 fig = px.scatter(
     df_top10,
-    x="זמן ביקור ממוצע",
-    y='סה"כ הכנסות',
-    size="נפח פעילות (מספר ביקורים)", # גודל הריבוע
-    color="עיר",
-    text="עיר",
-    hover_data={"עיר": False, "סה\"כ הכנסות": ':,.0f', "זמן ביקור ממוצע": ':.1f', "נפח פעילות (מספר ביקורים)": True},
-    title="מטריצת ביצועים אסטרטגית: ניתוח יעילות ערים",
+    x="Avg Visit Duration",
+    y="Total Revenue",
+    size="Visit Count",
+    color="City",
+    
+    # תיקון האינטראקטיביות (Hover)
+    hover_name="City",
+    hover_data={
+        "City": False,
+        "Total Revenue": ':,.0f',
+        "Avg Visit Duration": ':.1f',
+        "Visit Count": True
+    },
+    
+    text="City",
+    title="City Efficiency Analysis: Revenue vs. Time",
     template="plotly_white",
-    height=750
+    height=700
 )
 
+# עיצוב הסמנים (ריבועים)
 fig.update_traces(
-    marker_symbol='square',  # <=== זה מה שהופך לריבועים
+    marker_symbol='square',
     textposition='top center', 
-    textfont_weight="bold", 
-    marker=dict(line=dict(width=1.5, color='white'), opacity=0.9)
+    textfont=dict(size=12, family="Arial", color="black"),
+    marker=dict(line=dict(width=1, color='DarkSlateGrey'), opacity=0.8)
 )
-
-# ==========================================
-#
-# ==========================================
-x_min, x_max = df_top10['זמן ביקור ממוצע'].min() * 0.9, df_top10['זמן ביקור ממוצע'].max() * 1.1
-y_min, y_max = df_top10['סה"כ הכנסות'].min() * 0.9, df_top10['סה"כ הכנסות'].max() * 1.1
-
-fig.add_shape(type="rect", x0=x_min, y0=avg_rev, x1=avg_time, y1=y_max, fillcolor="#D4EFDF", opacity=0.5, layer="below", line_width=0)
-fig.add_shape(type="rect", x0=avg_time, y0=y_min, x1=x_max, y1=avg_rev, fillcolor="#FADBD8", opacity=0.5, layer="below", line_width=0)
-fig.add_shape(type="rect", x0=avg_time, y0=avg_rev, x1=x_max, y1=y_max, fillcolor="#FAE5D3", opacity=0.5, layer="below", line_width=0)
-fig.add_shape(type="rect", x0=x_min, y0=y_min, x1=avg_time, y1=avg_rev, fillcolor="#D6EAF8", opacity=0.5, layer="below", line_width=0)
-
-# קווים לבנים
-fig.add_vline(x=avg_time, line_dash="solid", line_color="white", line_width=3)
-fig.add_hline(y=avg_rev, line_dash="solid", line_color="white", line_width=3)
-
-# תוויות בפינות
-def add_label(x, y, text, color, align, x_shift, y_shift):
-    fig.add_annotation(x=x, y=y, text=f"<b>{text}</b>", showarrow=False, font=dict(size=14, color=color, family="Arial Black"), bgcolor="rgba(255,255,255,0.6)", xanchor=align, xshift=x_shift, yshift=y_shift)
-
-add_label(x_min, y_max, "💎 מצטיינים", "#196F3D", "left", 10, -10)
-add_label(x_max, y_min, "⚠️ ביצועים נמוכים", "#943126", "right", -10, 10)
-add_label(x_max, y_max, "🔨 דורש התייעלות", "#AF601A", "right", -10, -10)
-add_label(x_min, y_min, "🚀 פוטנציאל", "#2874A6", "left", 10, 10)
 
 fig.update_layout(
-    showlegend=False, 
-    margin=dict(t=90, b=60, l=60, r=60), 
-    xaxis=dict(title="<b>משך ביקור ממוצע (דקות)</b> ", range=[x_min, x_max]),
-    yaxis=dict(title="<b>סה\"כ הכנסות (₪)</b>", range=[y_min, y_max])
+    showlegend=False,
+    margin=dict(t=80, b=50, l=50, r=50),
+    xaxis=dict(
+        title="<b>Avg Visit Duration (Minutes)</b>",
+        showgrid=True,
+        gridcolor='#f0f0f0'
+    ),
+    yaxis=dict(
+        title="<b>Total Revenue (NIS)</b>",
+        showgrid=True,
+        gridcolor='#f0f0f0'
+    ),
+    title=dict(font=dict(size=24))
 )
 
- fig.write_image("Strategic_Matrix_Squares.png", scale=3, width=1200, height=800)
+# ==========================================
+# 4. הוספת המקרא (Legend) בפינה הימנית העליונה
+# ==========================================
+
+fig.add_annotation(
+    x=0.99, y=0.98,          # מיקום: פינה ימנית עליונה
+    xref="paper", yref="paper",
+    text="<b>Legend:</b><br>■ Square Size = <b>Visit Count</b>", # הטקסט במקרא
+    showarrow=False,
+    align="left",
+    font=dict(size=13, color="black"),
+    
+    # עיצוב הקופסה (כמו מקרא רגיל)
+    bgcolor="rgba(255, 255, 255, 0.9)", 
+    bordercolor="#333", 
+    borderwidth=1,
+    borderpad=8
+)
+
+# ==========================================
+# 5. שמירה
+# ==========================================
+
+fig.write_image("Clean_City_Matrix_Final.png", scale=3, width=1200, height=800)
+fig.write_html("clean_ciגדגדגדגדגדגדגדגדty_matrix_final.html")
 
 fig.show()
 ```
