@@ -661,19 +661,19 @@ plt.show()
   </thead>
   <tbody>
     <tr>
-      <td><strong>What – מה מוצג?</strong></td>
+      <td><strong>What </strong></td>
       <td>
  הוויזואליזציה מציגה Diverging Bar Chart (תרשים עמודות מתפצל) הממפה את איכות הניהול התפעולי של מנהלי הסוכנים. כל שורה מייצגת מנהל, והנתונים מנורמלים ל-100% פעילות. הציר המרכזי (האפס) מפריד בין שני עולמות: צד ימין (ירוק) מייצג ביקורים תקינים (שתוכננו ובוצעו), וצד שמאל (אדום/כתום) מייצג חריגות (ביקורים לא מתוכננים או שלא בוצעו כנדרש). בנוסף, כל צד מפוצל פנימית לפי ערוץ הפעילות: פיזי מול טלפוני.
       </td>
     </tr>
     <tr>
-      <td><strong>Why – למה בחרנו בגרף הזה?</strong></td>
+      <td><strong>Why </strong></td>
       <td>
 ההמטרה העסקית היא לעבור ממדידת "כמות" למדידת "איכות ומשמעת". גרף עמודות רגיל היה מקשה להשוות את היחס בין תכנון לביצוע. הבחירה בגרף מתפצל (Diverging) היא אסטרטגית: היא מאפשרת למקבל ההחלטות לראות בבת-אחת את "המאזן" של כל מנהל. העין תופסת מיידית מי "ירוק" (ממושמע) ומי "אדום" (פועל ללא תכנון), ומונעת מהמספרים המוחלטים להסתיר בעיות התנהגותיות.
       </td>
     </tr>
     <tr>
-      <td><strong>How – איך הגרף מציג את הנתונים?</strong></td>
+      <td><strong>How</strong></td>
       <td>
   הנתונים עברו אגרגציה וחישוב אחוזים יחסיים לכל מנהל. נעשה שימוש בקידוד צבע כפול: גוון (Hue) להפרדה בין טוב (ירוק) לרע (אדום), ובהירות (Lightness) להבחנה בין סוגי המדיה (פיזי/טלפוני). הטכניקה הוויזואלית נקראת Relative Stacking, המאפשרת השוואה הוגנת בין מנהלים ללא תלות בנפח הפעילות הכולל שלהם. האינטראקטיביות (Hover) חושפת את האחוזים המדויקים בכל פלח.
 
@@ -1327,15 +1327,17 @@ fig.show()
 
 <br>
 
-### Visualization Output 
+### Visualization Output
 
 <div align="center">
-  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/Strategic_Matrix_Squares.png?raw=true"
+  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/FIX%20PNG.png?raw=true"
        alt="Strategic Efficiency Matrix"
        width="85%"
        style="border: 1px solid #ccc; border-radius: 8px;">
-</div>
-<a href="https://htmlpreview.github.io/?https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/strategic_matrix_squares.html" target="_blank">
+
+  <br><br>
+  
+  <a href="https://htmlpreview.github.io/?https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/FIX%20HTML.html" target="_blank">
     <img src="https://img.shields.io/badge/VIEW_INTERACTIVE_GRAPH-Click_Here-brightgreen?style=for-the-badge&logo=html5&logoColor=white" alt="View Interactive Graph">
   </a>
   
@@ -1343,7 +1345,6 @@ fig.show()
     👆 <b>לחץ על הכפתור הירוק כדי לשחק עם הנתונים בזמן אמת</b>
   </p>
 </div>
-
 <br>
 
 ## הסבר על הגרף
