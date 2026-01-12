@@ -252,7 +252,7 @@ df_visits['Duration_Category'] = df_visits['duration_mins'].apply(classify_durat
 pivot_duration = df_visits.groupby(['Hour', 'Duration_Category']).size().unstack(fill_value=0)
 
 # Define Pastel Colors
-pastel_colors = ['#aec7e8', '#98df8a', '#ff9896']
+pastel_colors =['#d9f0a3', '#78c679', '#006837']
 
 # Create Plot
 plt.figure(figsize=(14, 7))
@@ -266,7 +266,7 @@ plt.xticks(
 )
 
 # Styling
-plt.title('Visit Duration Analysis: 07:00 - 19:00', fontsize=16, fontweight='bold', color='#333333')
+plt.title('Quality vs. Hour: How the Progression of the Day Negatively Impacts Visit Duration and Purpose (07:00 - 19:00)', fontsize=16, fontweight='bold', color='#333333')
 plt.xlabel('Hour of Day', fontsize=20)
 plt.ylabel('Number of Visits', fontsize=20)
 
@@ -402,7 +402,7 @@ def draw_comprehensive_density(x, label=None, color=None):
         ax.plot([med, med], [0, med_height], color='white', linestyle='--', lw=1.5, zorder=4)
 
     # Draw Global Median line (Benchmark)
-    ax.axvline(global_median, color='#6c757d', linestyle='--', lw=1.5, alpha=0.8, zorder=5)
+    ax.axvline(global_median, color='#00E5FF', linestyle='--', lw=1.5, alpha=0.8, zorder=5)
 
     # Base line
     ax.axhline(0, color="#333333", lw=1, zorder=5)
@@ -432,7 +432,7 @@ top_ax.text(1.02, 0.7, "MEDIAN", fontweight="bold", color="#555555", fontsize=9,
 top_ax.text(1.02, 0.65, "_______________________", fontweight="bold", color="#cccccc", fontsize=9, ha="left", transform=top_ax.transAxes)
 
 # Add label for Global Median line
-top_ax.text(global_median, 1.1, "Global Med", color='#34495e', fontsize=9, ha='center', fontweight='bold', transform=top_ax.get_xaxis_transform())
+top_ax.text(global_median, 1.1, "Global Med", color='#00E5FF', fontsize=9, ha='center', fontweight='bold', transform=top_ax.get_xaxis_transform())
 
 # Adjust spacing between plots
 g.figure.subplots_adjust(hspace=-0.35)
@@ -451,7 +451,7 @@ for ax in g.axes.flat:
     ax.grid(False)
 
 # Main Titles
-plt.suptitle("Top 10 Agents Performance: Deal Size Distribution", y=0.99, fontsize=18, fontweight='bold', color='#1a1a1a')
+plt.suptitle("Quantity vs. Quality in the Top 10: Identifying Work Patterns of Leading Agents Through Deal Size Distribution Shapes", y=0.99, fontsize=18, fontweight='bold', color='#1a1a1a')
 plt.figtext(0.5, 0.95, "Density normalized per agent", ha="center", fontsize=10, color='#666666')
 
 g.set_xlabels("Order Value (Net)", fontsize=12, fontweight='bold', labelpad=10, color='#555555')
@@ -612,8 +612,8 @@ ax.set_ylabel("", fontsize=11)
 ax.set_xticklabels([f"{int(h):02d}:00" for h in heatmap_data.columns])
 
 #  Titles & Footer 
-plt.text(x=0, y=-0.8, s="Conversion rate by day of week and hour of day",
-         fontsize=18, fontweight='bold', color='#2c3e50', ha='left')
+plt.text(x=0, y=-0.8, s="Temporal Efficiency in Sales: Locating Correlations Between Activity Hours and Deal Closing Probability",
+         fontsize=13, fontweight='bold', color='#2c3e50', ha='left')
 
 plt.text(x=0, y=-0.3, s="Retail visits converted to sales above 50 NIS, in percent",
          fontsize=12, color='#555555', ha='left')
