@@ -632,7 +632,7 @@ plt.show()
 ###  Visualization Output 
 
 <div align="center">
-  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/viz%203.png?raw=true"
+  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/HEATMAP.jpeg?raw=true"
        alt="Conversion Rate Heatmap"
        width="85%"
        style="border: 1px solid #ccc; border-radius: 8px;">
@@ -881,7 +881,7 @@ except:
 
 
 <div align="center">
-  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/HEATMAP.jpeg?raw=true"
+  <img src="https://github.com/orelgrBGU/Diplomat_Visualization/blob/main/newplot.png?raw=true"
        alt="Planning Discipline Visualization"
        width="85%"
        style="border: 1px solid #ccc; border-radius: 8px;">
